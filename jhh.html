@@ -1,0 +1,3135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Point Run Game - Free Online Runner Game | Play Now</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="google-site-verification" content="e725e7ee1619e660">
+    <link rel="icon" href="/Point-Run/favicon.png" type="image/png">
+    <link rel="shortcut icon" href="/Point-Run/favicon.png" type="image/png">
+    <meta property="og:image" content="https://rn7553675-r.github.io/Point-Run/preview.png">
+    <meta property="og:image" content="https://rn7553675-maker.github.io/Point-Run/game.png">
+    <meta name="google-site-verification" content="googlee725e7ee1619e660" />
+    <meta name="description" content="Play Point Run game online for free. Avoid obstacles, score high and enjoy this fun runner game in your browser.">
+    <meta name="keywords" content="Point Run, Point Run game, endless runner, 3D runner game, penguin runner, shooting runner game, HTML5 game, free online game, browser game, high score game, mobile runner game, play Point Run online">
+    <meta name="author" content="Point Run">
+    <meta property="og:title" content="Point Run Game - Play Free Online">
+    <meta property="og:description" content="Try Point Run game now! Beat high score and enjoy this fun runner game.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://rn7553675-maker.github.io/Point-Run/">
+    <style>
+        body { margin: 0; overflow: hidden; background: #bfdfff; font-family: 'Arial Black', sans-serif; touch-action: none; }
+        #ad-banner {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 320px;
+            height: 50px;
+            z-index: 9999;
+            background: rgba(0,0,0,0.15);
+            border-radius: 8px 8px 0 0;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #game-title {
+            position: fixed; top: 0; left: 0; right: 0;
+            z-index: 11;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 56px;
+            /* Wood plank: light brown with grain */
+            background:
+                repeating-linear-gradient(
+                    180deg,
+                    rgba(255,255,255,0.06) 0px, rgba(255,255,255,0.06) 1px,
+                    transparent 1px, transparent 8px
+                ),
+                linear-gradient(180deg, #c8763a 0%, #a0551e 40%, #8B4513 60%, #a0551e 100%);
+            border-bottom: 5px solid #5a2d00;
+            border-top: 2px solid #e8a060;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.55);
+            overflow: visible;
+        }
+        #game-title-inner {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 0px;
+        }
+        /* "POINT" - big yellow game-style text */
+        #game-title .title-point {
+            font-family: 'Arial Black', Impact, sans-serif;
+            font-size: 34px;
+            font-weight: 900;
+            color: #FFE033;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow:
+                0 1px 0 #fff8c0,
+                2px 2px 0 #b85000,
+                3px 3px 0 #8a3300,
+                4px 4px 0 #5a1f00,
+                4px 6px 10px rgba(0,0,0,0.6);
+            line-height: 1;
+        }
+        /* "RUN" - white text */
+        #game-title .title-run {
+            font-family: 'Arial Black', Impact, sans-serif;
+            font-size: 34px;
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-left: 10px;
+            text-shadow:
+                0 1px 0 #ffe0c0,
+                2px 2px 0 #7a3000,
+                3px 3px 0 #5a2000,
+                4px 4px 0 #3a1000,
+                4px 6px 10px rgba(0,0,0,0.6);
+            line-height: 1;
+        }
+        /* Left leaf */
+        #game-title .vine-left {
+            font-size: 26px;
+            margin-right: 6px;
+            transform: rotate(-15deg);
+            filter: drop-shadow(1px 2px 3px rgba(0,0,0,0.5));
+            user-select: none;
+        }
+        /* Right leaf */
+        #game-title .vine-right {
+            font-size: 26px;
+            margin-left: 6px;
+            transform: rotate(15deg);
+            filter: drop-shadow(1px 2px 3px rgba(0,0,0,0.5));
+            user-select: none;
+        }
+        /* Nail decorations */
+        #game-title .nail-left, #game-title .nail-right {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            background: radial-gradient(circle at 35% 35%, #f0f0f0, #999);
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.6), inset 0 1px 2px rgba(255,255,255,0.5);
+        }
+        #game-title .nail-left { left: 14px; }
+        #game-title .nail-right { right: 14px; }
+        #ui {
+            position: fixed; top: 58px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 8px; z-index: 10; width: 95%; max-width: 500px; 
+            justify-content: center; flex-wrap: wrap;
+        }
+        .stat-box {
+            padding: 6px 14px;
+            border-radius: 14px; 
+            border: 4px solid rgba(255,255,255,0.9);
+            color: #fff;
+            font-weight: 900;
+            display: flex; flex-direction: column; align-items: center;
+            min-width: 64px;
+            transition: all 0.15s ease;
+        }
+        .stat-box:active {
+            transform: translateY(3px);
+        }
+        .stat-label {
+            font-size: 11px; 
+            color: #fff;
+            margin-bottom: 2px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 900;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+        }
+        .stat-value {
+            font-size: 22px;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            line-height: 1;
+        }
+        #score-box {
+            background: linear-gradient(180deg, #FFB300 0%, #E65100 100%);
+            box-shadow: 0 5px 0 #bf360c, 0 7px 14px rgba(0,0,0,0.4);
+        }
+        #score-box:active {
+            box-shadow: 0 2px 0 #bf360c;
+        }
+        #ammo-box {
+            background: linear-gradient(180deg, #F44336 0%, #B71C1C 100%);
+            box-shadow: 0 5px 0 #7f0000, 0 7px 14px rgba(0,0,0,0.4);
+        }
+        #ammo-box:active {
+            box-shadow: 0 2px 0 #7f0000;
+        }
+        #dist-box {
+            background: linear-gradient(180deg, #4CAF50 0%, #1B5E20 100%);
+            box-shadow: 0 5px 0 #0a3d0a, 0 7px 14px rgba(0,0,0,0.4);
+        }
+        #dist-box:active {
+            box-shadow: 0 2px 0 #0a3d0a;
+        }
+        #hiscore-box {
+            background: linear-gradient(180deg, #9C27B0 0%, #4A148C 100%);
+            box-shadow: 0 5px 0 #1a0030, 0 7px 14px rgba(0,0,0,0.4);
+        }
+        #hiscore-box:active {
+            box-shadow: 0 2px 0 #1a0030;
+        }
+
+        #gameover {
+            position: fixed; inset: 0; 
+            background: linear-gradient(180deg, #87ceeb 0%, #b0e0f6 100%);
+            color: white; display: none; align-items: center; justify-content: center;
+            flex-direction: column; z-index: 20;
+            overflow: hidden;
+            padding: 20px;
+        }
+        #gameover::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.4) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.3) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.2) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .result-panel {
+            background: linear-gradient(135deg, #ff6b9d 0%, #ff8fab 100%);
+            border: 5px solid #fff;
+            border-radius: 30px;
+            padding: 35px 45px;
+            box-shadow: 
+                0 6px 0 #e91e63,
+                0 12px 35px rgba(0, 0, 0, 0.4),
+                inset 0 3px 15px rgba(255, 255, 255, 0.3);
+            text-align: center;
+            min-width: 300px;
+            max-width: 380px;
+            position: relative;
+            z-index: 2;
+            backdrop-filter: blur(10px);
+        }
+        .result-panel::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            height: 35%;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.4) 0%, transparent 100%);
+            border-radius: 25px;
+            pointer-events: none;
+        }
+        .result-banner {
+            background: linear-gradient(135deg, #ffd93d 0%, #ffed4e 100%);
+            border: 4px solid #fff;
+            border-radius: 20px;
+            padding: 12px 30px;
+            margin: -50px auto 20px;
+            box-shadow: 
+                0 5px 0 #f57c00,
+                0 8px 20px rgba(255, 165, 0, 0.5),
+                inset 0 2px 8px rgba(255, 255, 255, 0.5);
+            font-size: 28px;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 
+                2px 2px 0 #ff6b00,
+                -1px -1px 0 #ffaa00;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: bannerBounce 0.8s ease-out;
+            position: relative;
+        }
+        .result-banner::before {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 12px;
+            right: 12px;
+            height: 45%;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, transparent 100%);
+            border-radius: 15px;
+            pointer-events: none;
+        }
+        @keyframes bannerBounce {
+            0% { transform: scale(0) rotate(-10deg); }
+            60% { transform: scale(1.1) rotate(2deg); }
+            80% { transform: scale(0.95) rotate(-1deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+        .result-info {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
+            border-radius: 18px;
+            padding: 18px 22px;
+            margin: 18px 0;
+            border: 3px solid #fff;
+            box-shadow: 
+                0 3px 0 rgba(233, 30, 99, 0.3),
+                inset 0 2px 8px rgba(255, 255, 255, 0.5);
+        }
+        .result-info div {
+            margin: 10px 0;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: linear-gradient(90deg, rgba(255, 107, 157, 0.2) 0%, transparent 100%);
+            border-radius: 12px;
+        }
+        .result-info .label {
+            color: #e91e63;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 900;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+        }
+        .result-info .value {
+            font-size: 20px;
+            color: #ff6b00;
+            font-weight: 900;
+            text-shadow: 
+                1px 1px 0 #fff,
+                -1px -1px 0 #ffaa00;
+        }
+        .result-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 22px;
+        }
+        .result-btn {
+            background: linear-gradient(135deg, #4fc3f7 0%, #0288d1 100%);
+            border: 4px solid #fff;
+            border-radius: 35px;
+            padding: 12px 28px;
+            font-size: 16px;
+            font-weight: 900;
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 
+                0 5px 0 #01579b,
+                0 8px 20px rgba(1, 87, 155, 0.4),
+                inset 0 2px 8px rgba(255, 255, 255, 0.4);
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+        .result-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s;
+        }
+        .result-btn:hover::before {
+            left: 100%;
+        }
+        .result-btn::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 8px;
+            right: 8px;
+            height: 35%;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, transparent 100%);
+            border-radius: 30px;
+            pointer-events: none;
+        }
+        .result-btn:active {
+            transform: translateY(3px);
+            box-shadow: 
+                0 2px 0 #01579b,
+                0 4px 12px rgba(1, 87, 155, 0.4),
+                inset 0 2px 8px rgba(255, 255, 255, 0.4);
+        }
+        .result-btn.retry {
+            background: linear-gradient(135deg, #66bb6a 0%, #43a047 100%);
+            box-shadow: 
+                0 5px 0 #2e7d32,
+                0 8px 20px rgba(46, 125, 50, 0.4),
+                inset 0 2px 8px rgba(255, 255, 255, 0.4);
+        }
+        .result-btn.retry:active {
+            box-shadow: 
+                0 2px 0 #2e7d32,
+                0 4px 12px rgba(46, 125, 50, 0.4),
+                inset 0 2px 8px rgba(255, 255, 255, 0.4);
+        }
+        .controls {
+            position: fixed; bottom: 30px; width: 100%; display: flex;
+            justify-content: space-around; align-items: center; z-index: 10; pointer-events: none;
+        }
+        .nav-btns { display: flex; gap: 15px; pointer-events: auto; }
+        .btn {
+            width: 75px; height: 75px; border-radius: 20px; 
+            background: linear-gradient(180deg, #f5f5f5 0%, #bdbdbd 100%);
+            border: 5px solid #fff; color: #424242; display: flex; align-items: center; 
+            justify-content: center; font-size: 32px; cursor: pointer; user-select: none;
+            box-shadow: 0 6px 0 #757575, 0 8px 20px rgba(0, 0, 0, 0.4);
+            transition: all 0.2s ease;
+        }
+        .btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 3px 0 #757575, 0 4px 10px rgba(0, 0, 0, 0.4);
+        }
+        .btn.settings-btn {
+            background: linear-gradient(180deg, #9c27b0 0%, #7b1fa2 100%);
+            box-shadow: 0 6px 0 #4a148c, 0 8px 20px rgba(156, 39, 176, 0.4);
+        }
+        .btn.settings-btn:active {
+            box-shadow: 0 3px 0 #4a148c, 0 4px 10px rgba(156, 39, 176, 0.4);
+        }
+        #shoot-btn { 
+            width: 100px; height: 100px; border-radius: 50%; 
+            background: linear-gradient(180deg, #ff6b6b 0%, #ee5a6f 50%, #c92a2a 100%); 
+            box-shadow: 0 8px 0 #a61e1e, 0 10px 30px rgba(255,71,87,0.8); 
+            border: 6px solid #fff;
+            pointer-events: auto; font-size: 40px; display: flex; align-items: center; 
+            justify-content: center; user-select: none;
+            transition: all 0.2s ease;
+        }
+        #shoot-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 4px 0 #a61e1e, 0 5px 15px rgba(255,71,87,0.8);
+        }
+    </style>
+</head>
+<body>
+<div id="container-ee5d74748f26d218ec33a0d52a193384"></div>
+
+
+<div id="game-title">
+    <div class="nail-left"></div>
+    <div id="game-title-inner">
+        <div class="vine-left">🍃</div>
+        <div class="title-point">POINT</div>
+        <div class="title-run">RUN</div>
+        <div class="vine-right">🍃</div>
+    </div>
+    <div class="nail-right"></div>
+</div>
+
+<div id="ui">
+    <div class="stat-box" id="score-box">
+        <div class="stat-label">Score</div>
+        <div class="stat-value"><span id="score">0</span></div>
+    </div>
+    <div class="stat-box" id="ammo-box">
+        <div class="stat-label">Ammo</div>
+        <div class="stat-value"><span id="ammo">1</span></div>
+    </div>
+    <div class="stat-box" id="dist-box">
+        <div class="stat-label">Distance</div>
+        <div class="stat-value"><span id="dist">0</span>m</div>
+    </div>
+    <div class="stat-box" id="hiscore-box">
+        <div class="stat-label">Best</div>
+        <div class="stat-value"><span id="hiscore">0</span></div>
+    </div>
+</div>
+
+<div id="gameover">
+    <canvas id="gameover-canvas"></canvas>
+</div>
+
+<div class="controls">
+    <div class="nav-btns">
+        <div class="btn" id="l-btn">◀</div>
+        <div class="btn" id="r-btn">▶</div>
+    </div>
+    <div id="shoot-btn">🔥</div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.155/build/three.min.js"></script>
+
+<script>
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+let hiScore = parseInt(localStorage.getItem('arcticDashHiScore') || '0');
+document.getElementById('hiscore').innerText = hiScore;
+
+// Starting ammo tiers based on hi-score
+function getStartingAmmo(hs) {
+    if(hs >= 50000) return 100;
+    if(hs >= 20000) return 50;
+    if(hs >= 10000) return 30;
+    if(hs >= 5000)  return 20;
+    if(hs >= 2000)  return 15;
+    if(hs >= 500)   return 10;
+    return 5;
+}
+
+// Score milestone ammo bonuses (triggered once each)
+const ammoMilestones = [
+    { score: 500,   ammo: 10,  msg: "🎯 Score 500 — Ammo: 10!" },
+    { score: 1500,  ammo: 20,  msg: "🔥 Score 1500 — Ammo: 20!" },
+    { score: 3000,  ammo: 30,  msg: "⚡ Score 3000 — Ammo: 30!" },
+    { score: 6000,  ammo: 50,  msg: "💥 Score 6000 — Ammo: 50!" },
+    { score: 10000, ammo: 75,  msg: "👑 Score 10000 — Ammo: 75!" },
+    { score: 20000, ammo: 100, msg: "🌟 Score 20000 — Ammo: 100!" },
+    { score: 50000, ammo: 200, msg: "🔱 Score 50000 — Ammo: 200!" },
+];
+let reachedMilestones = new Set();
+
+function checkAmmoMilestone(currentScore) {
+    for(const m of ammoMilestones) {
+        if(currentScore >= m.score && !reachedMilestones.has(m.score)) {
+            reachedMilestones.add(m.score);
+            ammo = m.ammo;
+            document.getElementById('ammo').innerText = ammo;
+            showAmmoNotification(m.msg, m.ammo);
+        }
+    }
+}
+
+function showAmmoNotification(msg, ammoCount) {
+    let notif = document.getElementById('ammo-notif');
+    if(!notif) {
+        notif = document.createElement('div');
+        notif.id = 'ammo-notif';
+        notif.style.cssText = `
+            position:fixed; top:18%; left:50%; transform:translateX(-50%) scale(0);
+            background:linear-gradient(135deg,#43a047,#2e7d32);
+            color:#fff; font-weight:900; font-size:20px; padding:16px 30px;
+            border-radius:25px; border:4px solid #fff;
+            box-shadow:0 6px 0 #1b5e20, 0 10px 30px rgba(46,125,50,0.7);
+            text-align:center; z-index:100; pointer-events:none;
+            text-shadow:2px 2px 4px rgba(0,0,0,0.3);
+            transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+            white-space:nowrap;
+        `;
+        document.body.appendChild(notif);
+    }
+    notif.innerHTML = msg + '<br><span style="font-size:14px;opacity:0.9">🔫 Ammo set to ' + ammoCount + '</span>';
+    notif.style.transform = 'translateX(-50%) scale(1)';
+    clearTimeout(notif._timeout);
+    notif._timeout = setTimeout(() => {
+        notif.style.transform = 'translateX(-50%) scale(0)';
+    }, 2200);
+}
+
+function updateHiScore(playerScore) {
+    if(playerScore > hiScore) {
+        hiScore = playerScore;
+        localStorage.setItem('arcticDashHiScore', hiScore);
+        document.getElementById('hiscore').innerText = hiScore;
+        return true; // new record
+    }
+    return false;
+}
+
+
+
+function playSound(type) {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const oscillator = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    if (type === 'shoot') {
+        oscillator.type = 'sawtooth';
+        oscillator.frequency.setValueAtTime(1200, audioCtx.currentTime);
+        oscillator.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + 0.15);
+        gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + 0.15);
+        
+        const bass = audioCtx.createOscillator();
+        const bassGain = audioCtx.createGain();
+        bass.connect(bassGain);
+        bassGain.connect(audioCtx.destination);
+        bass.type = 'sine';
+        bass.frequency.setValueAtTime(80, audioCtx.currentTime);
+        bassGain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+        bassGain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+        bass.start();
+        bass.stop(audioCtx.currentTime + 0.1);
+    } 
+    else if (type === 'hit') {
+        oscillator.type = 'sawtooth';
+        oscillator.frequency.setValueAtTime(500, audioCtx.currentTime);
+        oscillator.frequency.linearRampToValueAtTime(50, audioCtx.currentTime + 0.3);
+        gainNode.gain.setValueAtTime(0.4, audioCtx.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + 0.3);
+        
+        const bufferSize = audioCtx.sampleRate * 0.2;
+        const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+        const noise = audioCtx.createBufferSource();
+        noise.buffer = buffer;
+        const noiseGain = audioCtx.createGain();
+        noise.connect(noiseGain);
+        noiseGain.connect(audioCtx.destination);
+        noiseGain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        noiseGain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+        noise.start();
+    }
+    else if (type === 'powerup') {
+        const notes = [440, 554, 659, 880];
+        notes.forEach((freq, i) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime + i * 0.08);
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime + i * 0.08);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + i * 0.08 + 0.3);
+            osc.start(audioCtx.currentTime + i * 0.08);
+            osc.stop(audioCtx.currentTime + i * 0.08 + 0.3);
+        });
+    }
+    else if (type === 'gameover') {
+        oscillator.type = 'triangle';
+        oscillator.frequency.setValueAtTime(300, audioCtx.currentTime);
+        oscillator.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.4);
+        oscillator.frequency.exponentialRampToValueAtTime(50, audioCtx.currentTime + 0.8);
+        gainNode.gain.setValueAtTime(0.4, audioCtx.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + 0.8);
+    }
+    else if (type === 'step') { 
+        const bufferSize = audioCtx.sampleRate * 0.05;
+        const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+        const noise = audioCtx.createBufferSource();
+        noise.buffer = buffer;
+        const noiseGain = audioCtx.createGain();
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(500, audioCtx.currentTime);
+        noise.connect(filter);
+        filter.connect(noiseGain);
+        noiseGain.connect(audioCtx.destination);
+        noiseGain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+        noiseGain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+        noise.start();
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(120, audioCtx.currentTime);
+        gainNode.gain.setValueAtTime(0.8, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.12);
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + 0.12);
+    }
+}
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xbfdfff);
+scene.fog = new THREE.Fog(0xbfdfff, 50, 300);
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 500);
+camera.position.set(0, 6, 16);
+const renderer = new THREE.WebGLRenderer({ 
+    antialias: false,
+    powerPreference: "high-performance",
+    stencil: false,
+    depth: true,
+    logarithmicDepthBuffer: false
+});
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+renderer.shadowMap.enabled = false;
+renderer.sortObjects = false;
+document.body.appendChild(renderer.domElement);
+
+const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
+scene.add(ambientLight);
+
+const sunMesh = new THREE.Mesh(
+    new THREE.SphereGeometry(15, 16, 16),
+    new THREE.MeshBasicMaterial({ color: 0xffdd44, fog: false })
+);
+sunMesh.position.set(80, 120, -400);
+scene.add(sunMesh);
+
+function createCloud(x, y, z) {
+    const cloudGroup = new THREE.Group();
+    const cloudMat = new THREE.MeshBasicMaterial({ 
+        color: 0xffffff, 
+        transparent: true, 
+        opacity: 0.8
+    });
+    
+    for(let i = 0; i < 3; i++) {
+        const puff = new THREE.Mesh(
+            new THREE.SphereGeometry(3 + Math.random() * 2, 6, 6),
+            cloudMat
+        );
+        puff.position.set(
+            (Math.random() - 0.5) * 8,
+            (Math.random() - 0.5) * 2,
+            (Math.random() - 0.5) * 5
+        );
+        cloudGroup.add(puff);
+    }
+    
+    cloudGroup.position.set(x, y, z);
+    return cloudGroup;
+}
+
+function createPineTree(x, z, scale = 1) {
+    const treeGroup = new THREE.Group();
+    
+    const trunkGeometry = new THREE.CylinderGeometry(0.35 * scale, 0.5 * scale, 4 * scale, 6);
+    const trunkMat = new THREE.MeshBasicMaterial({ 
+        color: 0x3d2817
+    });
+    const trunk = new THREE.Mesh(trunkGeometry, trunkMat);
+    trunk.position.y = 2 * scale;
+    treeGroup.add(trunk);
+    
+    const leafColors = [0x1a4d2e, 0x245a3a, 0x2d6a45];
+    
+    for(let i = 0; i < 3; i++) {
+        const layerRadius = (3.5 - i * 0.8) * scale;
+        const layerHeight = (3.5 - i * 0.5) * scale;
+        
+        const leaves = new THREE.Mesh(
+            new THREE.ConeGeometry(layerRadius, layerHeight, 6),
+            new THREE.MeshBasicMaterial({ 
+                color: leafColors[i % 3]
+            })
+        );
+        leaves.position.y = (4.5 + i * 2.5) * scale;
+        treeGroup.add(leaves);
+    }
+    
+    treeGroup.position.set(x, 0, z);
+    return treeGroup;
+}
+
+function createBush(x, z) {
+    const bushGroup = new THREE.Group();
+    
+    for(let i = 0; i < 2; i++) {
+        const bushPart = new THREE.Mesh(
+            new THREE.SphereGeometry(0.6 + Math.random() * 0.4, 6, 6),
+            new THREE.MeshBasicMaterial({ 
+                color: 0x3d6b1f
+            })
+        );
+        bushPart.position.set(
+            (Math.random() - 0.5) * 1.8,
+            0.3 + Math.random() * 0.4,
+            (Math.random() - 0.5) * 1.8
+        );
+        bushPart.scale.y = 0.7;
+        bushGroup.add(bushPart);
+    }
+    
+    bushGroup.position.set(x, 0, z);
+    return bushGroup;
+}
+
+const roadSegments = [];
+const segmentLength = 150;
+const clouds = [];
+
+function createSegment(z) {
+    const group = new THREE.Group();
+    
+    const groundGeo = new THREE.PlaneGeometry(200, segmentLength);
+    const groundMat = new THREE.MeshBasicMaterial({ color: 0xe8f4f8 });
+    const ground = new THREE.Mesh(groundGeo, groundMat);
+    ground.rotation.x = -Math.PI / 2;
+    ground.position.y = -0.1;
+    group.add(ground);
+    
+    for(let i = 0; i < 6; i++) {
+        const iceSize = 3 + Math.random() * 5;
+        const icePatch = new THREE.Mesh(
+            new THREE.CircleGeometry(iceSize, 8),
+            new THREE.MeshBasicMaterial({ color: 0xddf2ff })
+        );
+        icePatch.rotation.x = -Math.PI / 2;
+        const side = Math.random() > 0.5 ? 1 : -1;
+        icePatch.position.set(
+            side * (10 + Math.random() * 80),
+            -0.08,
+            (Math.random() - 0.5) * segmentLength
+        );
+        group.add(icePatch);
+    }
+    
+    for(let i = 0; i < 4; i++) {
+        const rockSize = 0.5 + Math.random() * 1.5;
+        const rock = new THREE.Mesh(
+            new THREE.DodecahedronGeometry(rockSize, 0),
+            new THREE.MeshBasicMaterial({ color: 0x556677 })
+        );
+        const side = Math.random() > 0.5 ? 1 : -1;
+        rock.position.set(
+            side * (10 + Math.random() * 70),
+            rockSize * 0.3,
+            (Math.random() - 0.5) * segmentLength
+        );
+        rock.rotation.set(
+            Math.random() * Math.PI,
+            Math.random() * Math.PI,
+            Math.random() * Math.PI
+        );
+        group.add(rock);
+    }
+    
+    for(let i = 0; i < 4; i++) {
+        const moundSize = 2 + Math.random() * 3;
+        const mound = new THREE.Mesh(
+            new THREE.SphereGeometry(moundSize, 8, 6),
+            new THREE.MeshBasicMaterial({ color: 0xffffff })
+        );
+        const side = Math.random() > 0.5 ? 1 : -1;
+        mound.position.set(
+            side * (12 + Math.random() * 60),
+            moundSize * 0.3,
+            (Math.random() - 0.5) * segmentLength
+        );
+        mound.scale.set(1, 0.4, 1);
+        group.add(mound);
+    }
+    
+    for(let i = 0; i < 8; i++) {
+        const smallSnow = new THREE.Mesh(
+            new THREE.ConeGeometry(0.3 + Math.random() * 0.5, 0.5 + Math.random() * 0.8, 6),
+            new THREE.MeshBasicMaterial({ color: 0xf0f8ff })
+        );
+        const side = Math.random() > 0.5 ? 1 : -1;
+        smallSnow.position.set(
+            side * (9 + Math.random() * 90),
+            0.2,
+            (Math.random() - 0.5) * segmentLength
+        );
+        group.add(smallSnow);
+    }
+    
+    const roadGeo = new THREE.PlaneGeometry(16, segmentLength);
+    const roadMat = new THREE.MeshBasicMaterial({ color: 0x1a2332 });
+    const road = new THREE.Mesh(roadGeo, roadMat);
+    road.rotation.x = -Math.PI / 2;
+    group.add(road);
+    
+    for(let i = 0; i < 10; i++) {
+        const lineGeo = new THREE.PlaneGeometry(0.4, 12);
+        const lineMat = new THREE.MeshBasicMaterial({ color: 0xffdd00 });
+        const centerLine = new THREE.Mesh(lineGeo, lineMat);
+        centerLine.rotation.x = -Math.PI / 2;
+        centerLine.position.set(0, 0.03, (i * 15) - segmentLength/2 + 7.5);
+        group.add(centerLine);
+    }
+    
+    for(let i = 0; i < 10; i++) {
+        const lineGeo = new THREE.PlaneGeometry(0.25, 10);
+        const lineMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.6 });
+        const leftLane = new THREE.Mesh(lineGeo, lineMat);
+        leftLane.rotation.x = -Math.PI / 2;
+        leftLane.position.set(-4, 0.03, (i * 15) - segmentLength/2 + 7.5);
+        group.add(leftLane);
+    }
+    
+    for(let i = 0; i < 10; i++) {
+        const lineGeo = new THREE.PlaneGeometry(0.25, 10);
+        const lineMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.6 });
+        const rightLane = new THREE.Mesh(lineGeo, lineMat);
+        rightLane.rotation.x = -Math.PI / 2;
+        rightLane.position.set(4, 0.03, (i * 15) - segmentLength/2 + 7.5);
+        group.add(rightLane);
+    }
+    
+    const leftBorderGeo = new THREE.PlaneGeometry(0.5, segmentLength);
+    const leftBorderMat = new THREE.MeshBasicMaterial({ color: 0x00d4ff });
+    const leftBorder = new THREE.Mesh(leftBorderGeo, leftBorderMat);
+    leftBorder.rotation.x = -Math.PI / 2;
+    leftBorder.position.set(-8.25, 0.04, 0);
+    group.add(leftBorder);
+    
+    const rightBorderGeo = new THREE.PlaneGeometry(0.5, segmentLength);
+    const rightBorderMat = new THREE.MeshBasicMaterial({ color: 0x00d4ff });
+    const rightBorder = new THREE.Mesh(rightBorderGeo, rightBorderMat);
+    rightBorder.rotation.x = -Math.PI / 2;
+    rightBorder.position.set(8.25, 0.04, 0);
+    group.add(rightBorder);
+    
+    const edgeGeo = new THREE.PlaneGeometry(0.2, segmentLength);
+    const edgeMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    const leftEdge = new THREE.Mesh(edgeGeo, edgeMat);
+    leftEdge.rotation.x = -Math.PI / 2;
+    leftEdge.position.set(-8.5, 0.05, 0);
+    group.add(leftEdge);
+    const rightEdge = new THREE.Mesh(edgeGeo, edgeMat);
+    rightEdge.rotation.x = -Math.PI / 2;
+    rightEdge.position.set(8.5, 0.05, 0);
+    group.add(rightEdge);
+    
+    for(let i=0; i<4; i++) {
+        group.add(createProMountain(-50 - Math.random()*20, (Math.random()-0.5)*segmentLength));
+        group.add(createProMountain(50 + Math.random()*20, (Math.random()-0.5)*segmentLength));
+    }
+    
+    for(let i = 0; i < 8; i++) {
+        const side = Math.random() > 0.5 ? 1 : -1;
+        const distance = (Math.random() - 0.5) * segmentLength;
+        
+        if(Math.random() > 0.4) {
+            const tree = createPineTree(
+                side * (12 + Math.random() * 8),
+                distance,
+                0.7 + Math.random() * 0.6
+            );
+            group.add(tree);
+        } else {
+            const bush = createBush(
+                side * (11 + Math.random() * 6),
+                distance
+            );
+            group.add(bush);
+        }
+    }
+    
+    group.position.z = z;
+    scene.add(group);
+    roadSegments.push(group);
+}
+
+function createProMountain(x, z) {
+    const h = 40 + Math.random()*40;
+    const mGroup = new THREE.Group();
+    
+    const baseSize = 30 + Math.random() * 10;
+    const baseHeight = h * 0.4;
+    
+    const base = new THREE.Mesh(
+        new THREE.ConeGeometry(baseSize, baseHeight, 5),
+        new THREE.MeshBasicMaterial({ 
+            color: 0x34495e
+        })
+    );
+    base.position.y = baseHeight / 2;
+    mGroup.add(base);
+    
+    const snowCapHeight = h * 0.5;
+    const snowCapRadius = baseSize * 0.6;
+    const snowCap = new THREE.Mesh(
+        new THREE.ConeGeometry(snowCapRadius, snowCapHeight, 5), 
+        new THREE.MeshBasicMaterial({ 
+            color: 0xffffff
+        })
+    );
+    snowCap.position.y = h * 0.5;
+    mGroup.add(snowCap);
+    
+    mGroup.position.set(x, 0, z);
+    mGroup.rotation.y = Math.random() * Math.PI;
+    return mGroup;
+}
+
+for(let i = 0; i < 8; i++) {
+    const cloud = createCloud(
+        (Math.random() - 0.5) * 300,
+        30 + Math.random() * 40,
+        -200 - Math.random() * 400
+    );
+    cloud.userData.speed = 0.02 + Math.random() * 0.03;
+    scene.add(cloud);
+    clouds.push(cloud);
+}
+
+for(let i=0; i<3; i++) createSegment(-i * segmentLength);
+
+function createEnergyOrb() {
+    const group = new THREE.Group();
+    const core = new THREE.Mesh(
+        new THREE.SphereGeometry(0.6, 8, 8),
+        new THREE.MeshBasicMaterial({ color: 0x00ffff })
+    );
+    group.add(core);
+    const shell = new THREE.Mesh(
+        new THREE.SphereGeometry(0.9, 8, 8),
+        new THREE.MeshBasicMaterial({ color: 0x00ffff, wireframe: true, transparent: true, opacity: 0.3 })
+    );
+    group.add(shell);
+    const ring = new THREE.Mesh(
+        new THREE.TorusGeometry(1.2, 0.05, 6, 24),
+        new THREE.MeshBasicMaterial({ color: 0x00ffff })
+    );
+    ring.rotation.x = Math.PI / 2;
+    group.add(ring);
+    // PointLight removed for performance
+    
+    group.userData = { shell: shell, ring: ring };
+    return group;
+}
+
+const playerGroup = new THREE.Group();
+
+const bodyGeo = new THREE.SphereGeometry(1, 16, 16);
+const bodyMat = new THREE.MeshBasicMaterial({ color: 0x1a1a1a });
+const body = new THREE.Mesh(bodyGeo, bodyMat);
+body.scale.set(1, 1.3, 0.9);
+playerGroup.add(body);
+
+const belly = new THREE.Mesh(
+    new THREE.SphereGeometry(0.85, 16, 16),
+    new THREE.MeshBasicMaterial({ color: 0xffffff })
+);
+belly.position.set(0, -0.1, 0.7);
+belly.scale.set(1, 1.2, 0.5);
+playerGroup.add(belly);
+
+const head = new THREE.Mesh(
+    new THREE.SphereGeometry(0.6, 16, 16),
+    new THREE.MeshBasicMaterial({ color: 0x1a1a1a })
+);
+head.position.set(0, 0.9, 0);
+playerGroup.add(head);
+
+const leftEyeWhite = new THREE.Mesh(
+    new THREE.SphereGeometry(0.25, 12, 12),
+    new THREE.MeshBasicMaterial({ color: 0xffffff })
+);
+leftEyeWhite.position.set(-0.25, 1, 0.5);
+playerGroup.add(leftEyeWhite);
+
+const leftPupil = new THREE.Mesh(
+    new THREE.SphereGeometry(0.12, 12, 12),
+    new THREE.MeshBasicMaterial({ color: 0x000000 })
+);
+leftPupil.position.set(-0.25, 1, 0.7);
+playerGroup.add(leftPupil);
+
+const rightEyeWhite = new THREE.Mesh(
+    new THREE.SphereGeometry(0.25, 12, 12),
+    new THREE.MeshBasicMaterial({ color: 0xffffff })
+);
+rightEyeWhite.position.set(0.25, 1, 0.5);
+playerGroup.add(rightEyeWhite);
+
+const rightPupil = new THREE.Mesh(
+    new THREE.SphereGeometry(0.12, 12, 12),
+    new THREE.MeshBasicMaterial({ color: 0x000000 })
+);
+rightPupil.position.set(0.25, 1, 0.7);
+playerGroup.add(rightPupil);
+
+const leftShine = new THREE.Mesh(
+    new THREE.SphereGeometry(0.06, 8, 8),
+    new THREE.MeshBasicMaterial({ color: 0xffffff })
+);
+leftShine.position.set(-0.22, 1.05, 0.75);
+playerGroup.add(leftShine);
+
+const rightShine = new THREE.Mesh(
+    new THREE.SphereGeometry(0.06, 8, 8),
+    new THREE.MeshBasicMaterial({ color: 0xffffff })
+);
+rightShine.position.set(0.28, 1.05, 0.75);
+playerGroup.add(rightShine);
+
+const beakTop = new THREE.Mesh(
+    new THREE.ConeGeometry(0.15, 0.4, 8),
+    new THREE.MeshBasicMaterial({ color: 0xff8c00 })
+);
+beakTop.rotation.x = Math.PI / 2;
+beakTop.position.set(0, 0.85, 0.7);
+playerGroup.add(beakTop);
+
+const beakBottom = new THREE.Mesh(
+    new THREE.ConeGeometry(0.12, 0.3, 8),
+    new THREE.MeshBasicMaterial({ color: 0xff7700 })
+);
+beakBottom.rotation.x = Math.PI / 2;
+beakBottom.position.set(0, 0.75, 0.75);
+playerGroup.add(beakBottom);
+
+const wingMat = new THREE.MeshBasicMaterial({ color: 0x2a2a2a });
+
+const leftWing = new THREE.Mesh(
+    new THREE.SphereGeometry(0.35, 12, 12),
+    wingMat
+);
+leftWing.position.set(-0.9, 0, 0.2);
+leftWing.scale.set(0.6, 1.5, 0.4);
+leftWing.rotation.z = -Math.PI / 6;
+playerGroup.add(leftWing);
+
+const rightWing = new THREE.Mesh(
+    new THREE.SphereGeometry(0.35, 12, 12),
+    wingMat
+);
+rightWing.position.set(0.9, 0, 0.2);
+rightWing.scale.set(0.6, 1.5, 0.4);
+rightWing.rotation.z = Math.PI / 6;
+playerGroup.add(rightWing);
+
+const feetMat = new THREE.MeshBasicMaterial({ color: 0xff8c00 });
+
+const leftFoot = new THREE.Mesh(
+    new THREE.SphereGeometry(0.3, 12, 12),
+    feetMat
+);
+leftFoot.position.set(-0.35, -1.2, 0.3);
+leftFoot.scale.set(1.2, 0.4, 1.5);
+playerGroup.add(leftFoot);
+
+const rightFoot = new THREE.Mesh(
+    new THREE.SphereGeometry(0.3, 12, 12),
+    feetMat
+);
+rightFoot.position.set(0.35, -1.2, 0.3);
+rightFoot.scale.set(1.2, 0.4, 1.5);
+playerGroup.add(rightFoot);
+
+const bowLeft = new THREE.Mesh(
+    new THREE.SphereGeometry(0.15, 12, 12),
+    new THREE.MeshBasicMaterial({ color: 0xff1744 })
+);
+bowLeft.position.set(-0.15, 1.3, 0.3);
+bowLeft.scale.set(1.5, 0.8, 0.5);
+playerGroup.add(bowLeft);
+
+const bowRight = new THREE.Mesh(
+    new THREE.SphereGeometry(0.15, 12, 12),
+    new THREE.MeshBasicMaterial({ color: 0xff1744 })
+);
+bowRight.position.set(0.15, 1.3, 0.3);
+bowRight.scale.set(1.5, 0.8, 0.5);
+playerGroup.add(bowRight);
+
+const bowCenter = new THREE.Mesh(
+    new THREE.SphereGeometry(0.1, 12, 12),
+    new THREE.MeshBasicMaterial({ color: 0xd50000 })
+);
+bowCenter.position.set(0, 1.3, 0.4);
+playerGroup.add(bowCenter);
+
+const leftCheek = new THREE.Mesh(
+    new THREE.SphereGeometry(0.15, 12, 12),
+    new THREE.MeshBasicMaterial({ color: 0xffb6c1, transparent: true, opacity: 0.7 })
+);
+leftCheek.position.set(-0.45, 0.75, 0.5);
+leftCheek.scale.set(1, 0.7, 0.4);
+playerGroup.add(leftCheek);
+
+const rightCheek = new THREE.Mesh(
+    new THREE.SphereGeometry(0.15, 12, 12),
+    new THREE.MeshBasicMaterial({ color: 0xffb6c1, transparent: true, opacity: 0.7 })
+);
+rightCheek.position.set(0.45, 0.75, 0.5);
+rightCheek.scale.set(1, 0.7, 0.4);
+playerGroup.add(rightCheek);
+
+playerGroup.position.y = 1.8;
+playerGroup.userData = {
+    leftWing: leftWing,
+    rightWing: rightWing,
+    leftPupil: leftPupil,
+    rightPupil: rightPupil
+};
+scene.add(playerGroup);
+
+const monsterColors = [0xff6b9d, 0x4fc3f7, 0xffd93d, 0x66bb6a, 0xba68c8];
+function createMonster(color) {
+    const monster = new THREE.Group();
+    
+    const bodyMat = new THREE.MeshBasicMaterial({ color: color });
+    
+    const mBody = new THREE.Mesh(
+        new THREE.SphereGeometry(1.2, 16, 16), 
+        bodyMat
+    );
+    mBody.scale.set(1, 1.3, 1);
+    monster.add(mBody);
+    
+    const belly = new THREE.Mesh(
+        new THREE.SphereGeometry(0.9, 12, 12),
+        new THREE.MeshBasicMaterial({ color: 0xffffff })
+    );
+    belly.position.set(0, -0.3, 0.8);
+    belly.scale.set(1, 1.2, 0.6);
+    monster.add(belly);
+    
+    const leftEyeWhite = new THREE.Mesh(
+        new THREE.SphereGeometry(0.35, 12, 12),
+        new THREE.MeshBasicMaterial({ color: 0xffffff })
+    );
+    leftEyeWhite.position.set(-0.4, 0.5, 1);
+    monster.add(leftEyeWhite);
+    
+    const leftPupil = new THREE.Mesh(
+        new THREE.SphereGeometry(0.18, 12, 12),
+        new THREE.MeshBasicMaterial({ color: 0x000000 })
+    );
+    leftPupil.position.set(-0.4, 0.5, 1.25);
+    monster.add(leftPupil);
+    
+    const rightEyeWhite = new THREE.Mesh(
+        new THREE.SphereGeometry(0.35, 12, 12),
+        new THREE.MeshBasicMaterial({ color: 0xffffff })
+    );
+    rightEyeWhite.position.set(0.4, 0.5, 1);
+    monster.add(rightEyeWhite);
+    
+    const rightPupil = new THREE.Mesh(
+        new THREE.SphereGeometry(0.18, 12, 12),
+        new THREE.MeshBasicMaterial({ color: 0x000000 })
+    );
+    rightPupil.position.set(0.4, 0.5, 1.25);
+    monster.add(rightPupil);
+    
+    const leftShine = new THREE.Mesh(
+        new THREE.SphereGeometry(0.08, 8, 8),
+        new THREE.MeshBasicMaterial({ color: 0xffffff })
+    );
+    leftShine.position.set(-0.35, 0.58, 1.3);
+    monster.add(leftShine);
+    
+    const rightShine = new THREE.Mesh(
+        new THREE.SphereGeometry(0.08, 8, 8),
+        new THREE.MeshBasicMaterial({ color: 0xffffff })
+    );
+    rightShine.position.set(0.45, 0.58, 1.3);
+    monster.add(rightShine);
+    
+    const smileCurve = new THREE.Shape();
+    smileCurve.moveTo(-0.4, 0);
+    smileCurve.quadraticCurveTo(0, -0.15, 0.4, 0);
+    const smileGeo = new THREE.ShapeGeometry(smileCurve);
+    const smile = new THREE.Mesh(
+        smileGeo,
+        new THREE.MeshBasicMaterial({ color: 0x000000 })
+    );
+    smile.position.set(0, 0.1, 1.15);
+    smile.scale.set(1, 1, 1);
+    monster.add(smile);
+    
+    const armMat = new THREE.MeshBasicMaterial({ color: color });
+    
+    const leftArm = new THREE.Mesh(
+        new THREE.CapsuleGeometry(0.2, 0.8, 8, 8),
+        armMat
+    );
+    leftArm.position.set(-1, 0, 0.3);
+    leftArm.rotation.z = Math.PI / 4;
+    monster.add(leftArm);
+    
+    const rightArm = new THREE.Mesh(
+        new THREE.CapsuleGeometry(0.2, 0.8, 8, 8),
+        armMat
+    );
+    rightArm.position.set(1, 0, 0.3);
+    rightArm.rotation.z = -Math.PI / 4;
+    monster.add(rightArm);
+    
+    const leftHand = new THREE.Mesh(
+        new THREE.SphereGeometry(0.25, 12, 12),
+        armMat
+    );
+    leftHand.position.set(-1.4, -0.3, 0.3);
+    monster.add(leftHand);
+    
+    const rightHand = new THREE.Mesh(
+        new THREE.SphereGeometry(0.25, 12, 12),
+        armMat
+    );
+    rightHand.position.set(1.4, -0.3, 0.3);
+    monster.add(rightHand);
+    
+    const leftFoot = new THREE.Mesh(
+        new THREE.SphereGeometry(0.35, 12, 12),
+        armMat
+    );
+    leftFoot.position.set(-0.5, -1.3, 0.2);
+    leftFoot.scale.set(1.2, 0.6, 1.5);
+    monster.add(leftFoot);
+    
+    const rightFoot = new THREE.Mesh(
+        new THREE.SphereGeometry(0.35, 12, 12),
+        armMat
+    );
+    rightFoot.position.set(0.5, -1.3, 0.2);
+    rightFoot.scale.set(1.2, 0.6, 1.5);
+    monster.add(rightFoot);
+    
+    const antennaBase = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.08, 0.08, 0.8, 8),
+        new THREE.MeshBasicMaterial({ color: color })
+    );
+    antennaBase.position.set(0, 1.3, 0);
+    monster.add(antennaBase);
+    
+    const antennaTop = new THREE.Mesh(
+        new THREE.SphereGeometry(0.15, 12, 12),
+        new THREE.MeshBasicMaterial({ color: 0xffeb3b })
+    );
+    antennaTop.position.set(0, 1.8, 0);
+    monster.add(antennaTop);
+    
+    monster.userData.runPhase = Math.random() * Math.PI * 2;
+    monster.userData.leftArm = leftArm;
+    monster.userData.rightArm = rightArm;
+    monster.userData.leftPupil = leftPupil;
+    monster.userData.rightPupil = rightPupil;
+    
+    return monster;
+}
+
+// --------- BOSS 1: Ice King (500m) ---------
+function createBoss1_IceKing() {
+    const boss = new THREE.Group();
+    
+    const bossMat = new THREE.MeshBasicMaterial({ color: 0x4fc3f7 });
+    
+    const bossBody = new THREE.Mesh(
+        new THREE.SphereGeometry(3, 20, 20), 
+        bossMat
+    );
+    bossBody.scale.set(1, 1.4, 1);
+    boss.add(bossBody);
+    
+    const belly = new THREE.Mesh(
+        new THREE.SphereGeometry(2.5, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0xe1f5fe })
+    );
+    belly.position.set(0, -0.5, 2.2);
+    belly.scale.set(1, 1.2, 0.6);
+    boss.add(belly);
+    
+    const leftEyeWhite = new THREE.Mesh(
+        new THREE.SphereGeometry(0.9, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0xffffff })
+    );
+    leftEyeWhite.position.set(-1, 1.8, 2.5);
+    boss.add(leftEyeWhite);
+    
+    const leftPupil = new THREE.Mesh(
+        new THREE.SphereGeometry(0.45, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0x0d47a1 })
+    );
+    leftPupil.position.set(-1, 1.8, 3);
+    boss.add(leftPupil);
+    
+    const rightEyeWhite = new THREE.Mesh(
+        new THREE.SphereGeometry(0.9, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0xffffff })
+    );
+    rightEyeWhite.position.set(1, 1.8, 2.5);
+    boss.add(rightEyeWhite);
+    
+    const rightPupil = new THREE.Mesh(
+        new THREE.SphereGeometry(0.45, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0x0d47a1 })
+    );
+    rightPupil.position.set(1, 1.8, 3);
+    boss.add(rightPupil);
+    
+    // Ice Crown
+    const crownBase = new THREE.Mesh(
+        new THREE.CylinderGeometry(1.5, 1.7, 0.6, 8),
+        new THREE.MeshBasicMaterial({ color: 0x81d4fa })
+    );
+    crownBase.position.set(0, 4.2, 0);
+    boss.add(crownBase);
+    
+    for(let i = 0; i < 6; i++) {
+        const spike = new THREE.Mesh(
+            new THREE.ConeGeometry(0.35, 1.2, 4),
+            new THREE.MeshBasicMaterial({ color: 0x4fc3f7 })
+        );
+        const angle = (Math.PI * 2 * i) / 6;
+        spike.position.set(
+            Math.cos(angle) * 1.6,
+            4.8,
+            Math.sin(angle) * 1.6
+        );
+        boss.add(spike);
+    }
+    
+    // Ice Crystal on crown
+    const crystal = new THREE.Mesh(
+        new THREE.OctahedronGeometry(0.4, 0),
+        new THREE.MeshBasicMaterial({ color: 0x00e5ff })
+    );
+    crystal.position.set(0, 5.2, 0);
+    boss.add(crystal);
+    
+    const armMat = new THREE.MeshBasicMaterial({ color: 0x4fc3f7 });
+    
+    const leftArm = new THREE.Mesh(
+        new THREE.CapsuleGeometry(0.6, 3, 12, 12),
+        armMat
+    );
+    leftArm.position.set(-3, 1, 1);
+    leftArm.rotation.z = Math.PI / 4;
+    boss.add(leftArm);
+    
+    const rightArm = new THREE.Mesh(
+        new THREE.CapsuleGeometry(0.6, 3, 12, 12),
+        armMat
+    );
+    rightArm.position.set(3, 1, 1);
+    rightArm.rotation.z = -Math.PI / 4;
+    boss.add(rightArm);
+    
+    const leftHand = new THREE.Mesh(
+        new THREE.SphereGeometry(0.8, 12, 12),
+        armMat
+    );
+    leftHand.position.set(-4.5, -0.5, 1);
+    boss.add(leftHand);
+    
+    const rightHand = new THREE.Mesh(
+        new THREE.SphereGeometry(0.8, 12, 12),
+        armMat
+    );
+    rightHand.position.set(4.5, -0.5, 1);
+    boss.add(rightHand);
+    
+    // PointLight removed for performance
+    
+    boss.userData.runPhase = 0;
+    boss.userData.isBoss = true;
+    boss.userData.bossType = 'IceKing';
+    boss.userData.health = 2;
+    boss.userData.leftArm = leftArm;
+    boss.userData.rightArm = rightArm;
+    boss.userData.leftPupil = leftPupil;
+    boss.userData.rightPupil = rightPupil;
+    boss.userData.crystal = crystal;
+    
+    return boss;
+}
+
+// --------- BOSS 2: Fire Giant (1000m) ---------
+function createBoss2_FireGiant() {
+    const boss = new THREE.Group();
+    
+    const bossMat = new THREE.MeshBasicMaterial({ color: 0xff3838 });
+    
+    const bossBody = new THREE.Mesh(
+        new THREE.SphereGeometry(3.5, 20, 20), 
+        bossMat
+    );
+    bossBody.scale.set(1, 1.5, 1);
+    boss.add(bossBody);
+    
+    const belly = new THREE.Mesh(
+        new THREE.SphereGeometry(3, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0xff8a65 })
+    );
+    belly.position.set(0, -0.7, 2.5);
+    belly.scale.set(1, 1.2, 0.6);
+    boss.add(belly);
+    
+    const leftEyeWhite = new THREE.Mesh(
+        new THREE.SphereGeometry(1, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0xffc107 })
+    );
+    leftEyeWhite.position.set(-1.2, 2, 3);
+    boss.add(leftEyeWhite);
+    
+    const leftPupil = new THREE.Mesh(
+        new THREE.SphereGeometry(0.5, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0xff5722 })
+    );
+    leftPupil.position.set(-1.2, 2, 3.5);
+    boss.add(leftPupil);
+    
+    const rightEyeWhite = new THREE.Mesh(
+        new THREE.SphereGeometry(1, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0xffc107 })
+    );
+    rightEyeWhite.position.set(1.2, 2, 3);
+    boss.add(rightEyeWhite);
+    
+    const rightPupil = new THREE.Mesh(
+        new THREE.SphereGeometry(0.5, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0xff5722 })
+    );
+    rightPupil.position.set(1.2, 2, 3.5);
+    boss.add(rightPupil);
+    
+    // Flame horns
+    for(let i = 0; i < 2; i++) {
+        const horn = new THREE.Mesh(
+            new THREE.ConeGeometry(0.5, 2, 6),
+            new THREE.MeshBasicMaterial({ color: 0xff3838 })
+        );
+        horn.position.set(i === 0 ? -1.5 : 1.5, 4.5, 0.5);
+        horn.rotation.z = (i === 0 ? -1 : 1) * Math.PI / 6;
+        boss.add(horn);
+        
+        const flame = new THREE.Mesh(
+            new THREE.SphereGeometry(0.3, 8, 8),
+            new THREE.MeshBasicMaterial({ 
+                color: 0xffeb3b,
+                transparent: true,
+                opacity: 0.8
+            })
+        );
+        flame.position.set(i === 0 ? -2 : 2, 5.8, 0.5);
+        flame.scale.set(1, 1.5, 1);
+        boss.add(flame);
+    }
+    
+    const armMat = new THREE.MeshBasicMaterial({ color: 0xff3838 });
+    
+    const leftArm = new THREE.Mesh(
+        new THREE.CapsuleGeometry(0.7, 3.5, 12, 12),
+        armMat
+    );
+    leftArm.position.set(-3.5, 1.5, 1.2);
+    leftArm.rotation.z = Math.PI / 5;
+    boss.add(leftArm);
+    
+    const rightArm = new THREE.Mesh(
+        new THREE.CapsuleGeometry(0.7, 3.5, 12, 12),
+        armMat
+    );
+    rightArm.position.set(3.5, 1.5, 1.2);
+    rightArm.rotation.z = -Math.PI / 5;
+    boss.add(rightArm);
+    
+    const leftHand = new THREE.Mesh(
+        new THREE.SphereGeometry(0.9, 12, 12),
+        armMat
+    );
+    leftHand.position.set(-5, -0.8, 1.2);
+    boss.add(leftHand);
+    
+    const rightHand = new THREE.Mesh(
+        new THREE.SphereGeometry(0.9, 12, 12),
+        armMat
+    );
+    rightHand.position.set(5, -0.8, 1.2);
+    boss.add(rightHand);
+    // PointLight removed for performance
+    
+    boss.userData.runPhase = 0;
+    boss.userData.isBoss = true;
+    boss.userData.bossType = 'FireGiant';
+    boss.userData.health = 2;
+    boss.userData.leftArm = leftArm;
+    boss.userData.rightArm = rightArm;
+    boss.userData.leftPupil = leftPupil;
+    boss.userData.rightPupil = rightPupil;
+    
+    return boss;
+}
+
+// --------- BOSS 3: Thunder Lord (1500m) ---------
+function createBoss3_ThunderLord() {
+    const boss = new THREE.Group();
+    
+    const bossMat = new THREE.MeshBasicMaterial({ color: 0xffeb3b });
+    
+    const bossBody = new THREE.Mesh(
+        new THREE.SphereGeometry(3.8, 20, 20), 
+        bossMat
+    );
+    bossBody.scale.set(1, 1.6, 1);
+    boss.add(bossBody);
+    
+    const belly = new THREE.Mesh(
+        new THREE.SphereGeometry(3.2, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0xffeb3b })
+    );
+    belly.position.set(0, -0.8, 2.8);
+    belly.scale.set(1, 1.2, 0.6);
+    boss.add(belly);
+    
+    const leftEyeWhite = new THREE.Mesh(
+        new THREE.SphereGeometry(1.1, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0xe3f2fd })
+    );
+    leftEyeWhite.position.set(-1.3, 2.2, 3.2);
+    boss.add(leftEyeWhite);
+    
+    const leftPupil = new THREE.Mesh(
+        new THREE.SphereGeometry(0.55, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0x00e5ff })
+    );
+    leftPupil.position.set(-1.3, 2.2, 3.8);
+    boss.add(leftPupil);
+    
+    const rightEyeWhite = new THREE.Mesh(
+        new THREE.SphereGeometry(1.1, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0xe3f2fd })
+    );
+    rightEyeWhite.position.set(1.3, 2.2, 3.2);
+    boss.add(rightEyeWhite);
+    
+    const rightPupil = new THREE.Mesh(
+        new THREE.SphereGeometry(0.55, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0x00e5ff })
+    );
+    rightPupil.position.set(1.3, 2.2, 3.8);
+    boss.add(rightPupil);
+    
+    // Lightning Crown
+    const crownBase = new THREE.Mesh(
+        new THREE.CylinderGeometry(1.8, 2, 0.7, 8),
+        new THREE.MeshBasicMaterial({ color: 0xffd93d })
+    );
+    crownBase.position.set(0, 5, 0);
+    boss.add(crownBase);
+    
+    for(let i = 0; i < 8; i++) {
+        const bolt = new THREE.Mesh(
+            new THREE.ConeGeometry(0.3, 1.5, 4),
+            new THREE.MeshBasicMaterial({ color: 0xffeb3b })
+        );
+        const angle = (Math.PI * 2 * i) / 8;
+        bolt.position.set(
+            Math.cos(angle) * 1.9,
+            5.6,
+            Math.sin(angle) * 1.9
+        );
+        bolt.rotation.z = (Math.random() - 0.5) * 0.4;
+        boss.add(bolt);
+    }
+    
+    // Electric orb
+    const orb = new THREE.Mesh(
+        new THREE.SphereGeometry(0.5, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0x00e5ff, transparent: true, opacity: 0.9 })
+    );
+    orb.position.set(0, 6.2, 0);
+    boss.add(orb);
+    
+    const armMat = new THREE.MeshBasicMaterial({ color: 0xffeb3b });
+    
+    const leftArm = new THREE.Mesh(
+        new THREE.CapsuleGeometry(0.8, 4, 12, 12),
+        armMat
+    );
+    leftArm.position.set(-4, 2, 1.5);
+    leftArm.rotation.z = Math.PI / 5;
+    boss.add(leftArm);
+    
+    const rightArm = new THREE.Mesh(
+        new THREE.CapsuleGeometry(0.8, 4, 12, 12),
+        armMat
+    );
+    rightArm.position.set(4, 2, 1.5);
+    rightArm.rotation.z = -Math.PI / 5;
+    boss.add(rightArm);
+    
+    const leftHand = new THREE.Mesh(
+        new THREE.SphereGeometry(1, 12, 12),
+        armMat
+    );
+    leftHand.position.set(-5.8, -0.5, 1.5);
+    boss.add(leftHand);
+    
+    const rightHand = new THREE.Mesh(
+        new THREE.SphereGeometry(1, 12, 12),
+        armMat
+    );
+    rightHand.position.set(5.8, -0.5, 1.5);
+    boss.add(rightHand);
+    // PointLight removed for performance
+    
+    boss.userData.runPhase = 0;
+    boss.userData.isBoss = true;
+    boss.userData.bossType = 'ThunderLord';
+    boss.userData.health = 2;
+    boss.userData.leftArm = leftArm;
+    boss.userData.rightArm = rightArm;
+    boss.userData.leftPupil = leftPupil;
+    boss.userData.rightPupil = rightPupil;
+    boss.userData.orb = orb;
+    
+    return boss;
+}
+
+// --------- BOSS 4: Shadow King (2000m) ---------
+function createBoss4_ShadowKing() {
+    const boss = new THREE.Group();
+    
+    const bossMat = new THREE.MeshBasicMaterial({ color: 0x4a148c });
+    
+    const bossBody = new THREE.Mesh(
+        new THREE.SphereGeometry(4, 20, 20), 
+        bossMat
+    );
+    bossBody.scale.set(1, 1.7, 1);
+    boss.add(bossBody);
+    
+    const belly = new THREE.Mesh(
+        new THREE.SphereGeometry(3.5, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0x7b1fa2 })
+    );
+    belly.position.set(0, -1, 3);
+    belly.scale.set(1, 1.2, 0.6);
+    boss.add(belly);
+    
+    const leftEyeWhite = new THREE.Mesh(
+        new THREE.SphereGeometry(1.2, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0xd500f9 })
+    );
+    leftEyeWhite.position.set(-1.5, 2.5, 3.5);
+    boss.add(leftEyeWhite);
+    
+    const leftPupil = new THREE.Mesh(
+        new THREE.SphereGeometry(0.6, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0x000000 })
+    );
+    leftPupil.position.set(-1.5, 2.5, 4.2);
+    boss.add(leftPupil);
+    
+    const rightEyeWhite = new THREE.Mesh(
+        new THREE.SphereGeometry(1.2, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0xd500f9 })
+    );
+    rightEyeWhite.position.set(1.5, 2.5, 3.5);
+    boss.add(rightEyeWhite);
+    
+    const rightPupil = new THREE.Mesh(
+        new THREE.SphereGeometry(0.6, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0x000000 })
+    );
+    rightPupil.position.set(1.5, 2.5, 4.2);
+    boss.add(rightPupil);
+    
+    // Dark Crown
+    const crownBase = new THREE.Mesh(
+        new THREE.CylinderGeometry(2, 2.2, 0.8, 8),
+        new THREE.MeshBasicMaterial({ color: 0x1a1a1a })
+    );
+    crownBase.position.set(0, 5.5, 0);
+    boss.add(crownBase);
+    
+    for(let i = 0; i < 8; i++) {
+        const spike = new THREE.Mesh(
+            new THREE.ConeGeometry(0.4, 1.8, 4),
+            new THREE.MeshBasicMaterial({ color: 0xd500f9 })
+        );
+        const angle = (Math.PI * 2 * i) / 8;
+        spike.position.set(
+            Math.cos(angle) * 2.1,
+            6.3,
+            Math.sin(angle) * 2.1
+        );
+        boss.add(spike);
+    }
+    
+    // Purple gem
+    const gem = new THREE.Mesh(
+        new THREE.OctahedronGeometry(0.6, 0),
+        new THREE.MeshBasicMaterial({ color: 0xd500f9, transparent: true, opacity: 0.95 })
+    );
+    gem.position.set(0, 7, 0);
+    boss.add(gem);
+    
+    const armMat = new THREE.MeshBasicMaterial({ color: 0x4a148c });
+    
+    const leftArm = new THREE.Mesh(
+        new THREE.CapsuleGeometry(0.9, 4.5, 12, 12),
+        armMat
+    );
+    leftArm.position.set(-4.5, 2.5, 2);
+    leftArm.rotation.z = Math.PI / 5;
+    boss.add(leftArm);
+    
+    const rightArm = new THREE.Mesh(
+        new THREE.CapsuleGeometry(0.9, 4.5, 12, 12),
+        armMat
+    );
+    rightArm.position.set(4.5, 2.5, 2);
+    rightArm.rotation.z = -Math.PI / 5;
+    boss.add(rightArm);
+    
+    const leftHand = new THREE.Mesh(
+        new THREE.SphereGeometry(1.1, 12, 12),
+        armMat
+    );
+    leftHand.position.set(-6.5, -0.8, 2);
+    boss.add(leftHand);
+    
+    const rightHand = new THREE.Mesh(
+        new THREE.SphereGeometry(1.1, 12, 12),
+        armMat
+    );
+    rightHand.position.set(6.5, -0.8, 2);
+    boss.add(rightHand);
+    // PointLight removed for performance
+    
+    boss.userData.runPhase = 0;
+    boss.userData.isBoss = true;
+    boss.userData.bossType = 'ShadowKing';
+    boss.userData.health = 2;
+    boss.userData.leftArm = leftArm;
+    boss.userData.rightArm = rightArm;
+    boss.userData.leftPupil = leftPupil;
+    boss.userData.rightPupil = rightPupil;
+    boss.userData.gem = gem;
+    
+    return boss;
+}
+
+// --------- BOSS 5: Emerald Dragon (6000m) ---------
+function createBoss5_EmeraldDragon() {
+    const boss = new THREE.Group();
+    
+    const bossMat = new THREE.MeshBasicMaterial({ color: 0x43a047 });
+    
+    const bossBody = new THREE.Mesh(
+        new THREE.SphereGeometry(4.2, 20, 20), 
+        bossMat
+    );
+    bossBody.scale.set(1, 1.8, 1);
+    boss.add(bossBody);
+    
+    const belly = new THREE.Mesh(
+        new THREE.SphereGeometry(3.7, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0x81c784 })
+    );
+    belly.position.set(0, -1.2, 3.2);
+    belly.scale.set(1, 1.2, 0.6);
+    boss.add(belly);
+    
+    const leftEyeWhite = new THREE.Mesh(
+        new THREE.SphereGeometry(1.3, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0xffeb3b })
+    );
+    leftEyeWhite.position.set(-1.6, 2.8, 3.7);
+    boss.add(leftEyeWhite);
+    
+    const leftPupil = new THREE.Mesh(
+        new THREE.SphereGeometry(0.65, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0x1a1a1a })
+    );
+    leftPupil.position.set(-1.6, 2.8, 4.4);
+    boss.add(leftPupil);
+    
+    const rightEyeWhite = new THREE.Mesh(
+        new THREE.SphereGeometry(1.3, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0xffeb3b })
+    );
+    rightEyeWhite.position.set(1.6, 2.8, 3.7);
+    boss.add(rightEyeWhite);
+    
+    const rightPupil = new THREE.Mesh(
+        new THREE.SphereGeometry(0.65, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0x1a1a1a })
+    );
+    rightPupil.position.set(1.6, 2.8, 4.4);
+    boss.add(rightPupil);
+    
+    const armMat = new THREE.MeshBasicMaterial({ color: 0x43a047 });
+    
+    const leftArm = new THREE.Mesh(
+        new THREE.CapsuleGeometry(1, 5, 12, 12),
+        armMat
+    );
+    leftArm.position.set(-5, 3, 2.2);
+    leftArm.rotation.z = Math.PI / 5;
+    boss.add(leftArm);
+    
+    const rightArm = new THREE.Mesh(
+        new THREE.CapsuleGeometry(1, 5, 12, 12),
+        armMat
+    );
+    rightArm.position.set(5, 3, 2.2);
+    rightArm.rotation.z = -Math.PI / 5;
+    boss.add(rightArm);
+    // PointLight removed for performance
+    
+    boss.userData.runPhase = 0;
+    boss.userData.isBoss = true;
+    boss.userData.bossType = 'EmeraldDragon';
+    boss.userData.health = 2;
+    boss.userData.leftArm = leftArm;
+    boss.userData.rightArm = rightArm;
+    boss.userData.leftPupil = leftPupil;
+    boss.userData.rightPupil = rightPupil;
+    
+    return boss;
+}
+
+// --------- BOSS 6: Crimson Titan (9000m) ---------
+function createBoss6_CrimsonTitan() {
+    const boss = new THREE.Group();
+    
+    const bossMat = new THREE.MeshBasicMaterial({ color: 0xc2185b });
+    
+    const bossBody = new THREE.Mesh(
+        new THREE.SphereGeometry(4.5, 20, 20), 
+        bossMat
+    );
+    bossBody.scale.set(1, 1.9, 1);
+    boss.add(bossBody);
+    
+    const belly = new THREE.Mesh(
+        new THREE.SphereGeometry(4, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0xf06292 })
+    );
+    belly.position.set(0, -1.4, 3.5);
+    belly.scale.set(1, 1.2, 0.6);
+    boss.add(belly);
+    
+    const leftEyeWhite = new THREE.Mesh(
+        new THREE.SphereGeometry(1.4, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0xff1744 })
+    );
+    leftEyeWhite.position.set(-1.7, 3.2, 4);
+    boss.add(leftEyeWhite);
+    
+    const leftPupil = new THREE.Mesh(
+        new THREE.SphereGeometry(0.7, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0x1a1a1a })
+    );
+    leftPupil.position.set(-1.7, 3.2, 4.7);
+    boss.add(leftPupil);
+    
+    const rightEyeWhite = new THREE.Mesh(
+        new THREE.SphereGeometry(1.4, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0xff1744 })
+    );
+    rightEyeWhite.position.set(1.7, 3.2, 4);
+    boss.add(rightEyeWhite);
+    
+    const rightPupil = new THREE.Mesh(
+        new THREE.SphereGeometry(0.7, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0x1a1a1a })
+    );
+    rightPupil.position.set(1.7, 3.2, 4.7);
+    boss.add(rightPupil);
+    
+    const armMat = new THREE.MeshBasicMaterial({ color: 0xc2185b });
+    
+    const leftArm = new THREE.Mesh(
+        new THREE.CapsuleGeometry(1.1, 5.5, 12, 12),
+        armMat
+    );
+    leftArm.position.set(-5.5, 3.5, 2.5);
+    leftArm.rotation.z = Math.PI / 5;
+    boss.add(leftArm);
+    
+    const rightArm = new THREE.Mesh(
+        new THREE.CapsuleGeometry(1.1, 5.5, 12, 12),
+        armMat
+    );
+    rightArm.position.set(5.5, 3.5, 2.5);
+    rightArm.rotation.z = -Math.PI / 5;
+    boss.add(rightArm);
+    // PointLight removed for performance
+    
+    boss.userData.runPhase = 0;
+    boss.userData.isBoss = true;
+    boss.userData.bossType = 'CrimsonTitan';
+    boss.userData.health = 2;
+    boss.userData.leftArm = leftArm;
+    boss.userData.rightArm = rightArm;
+    boss.userData.leftPupil = leftPupil;
+    boss.userData.rightPupil = rightPupil;
+    
+    return boss;
+}
+
+// --------- BOSS 7: Azure Leviathan (13000m) ---------
+function createBoss7_AzureLeviathan() {
+    const boss = new THREE.Group();
+    
+    const bossMat = new THREE.MeshBasicMaterial({ color: 0x1976d2 });
+    
+    const bossBody = new THREE.Mesh(
+        new THREE.SphereGeometry(4.8, 20, 20), 
+        bossMat
+    );
+    bossBody.scale.set(1, 2, 1);
+    boss.add(bossBody);
+    
+    const belly = new THREE.Mesh(
+        new THREE.SphereGeometry(4.3, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0x64b5f6 })
+    );
+    belly.position.set(0, -1.6, 3.8);
+    belly.scale.set(1, 1.2, 0.6);
+    boss.add(belly);
+    
+    const leftEyeWhite = new THREE.Mesh(
+        new THREE.SphereGeometry(1.5, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0x00e5ff })
+    );
+    leftEyeWhite.position.set(-1.8, 3.5, 4.3);
+    boss.add(leftEyeWhite);
+    
+    const leftPupil = new THREE.Mesh(
+        new THREE.SphereGeometry(0.75, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0x1a1a1a })
+    );
+    leftPupil.position.set(-1.8, 3.5, 5);
+    boss.add(leftPupil);
+    
+    const rightEyeWhite = new THREE.Mesh(
+        new THREE.SphereGeometry(1.5, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0x00e5ff })
+    );
+    rightEyeWhite.position.set(1.8, 3.5, 4.3);
+    boss.add(rightEyeWhite);
+    
+    const rightPupil = new THREE.Mesh(
+        new THREE.SphereGeometry(0.75, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0x1a1a1a })
+    );
+    rightPupil.position.set(1.8, 3.5, 5);
+    boss.add(rightPupil);
+    
+    const armMat = new THREE.MeshBasicMaterial({ color: 0x1976d2 });
+    
+    const leftArm = new THREE.Mesh(
+        new THREE.CapsuleGeometry(1.2, 6, 12, 12),
+        armMat
+    );
+    leftArm.position.set(-6, 4, 2.8);
+    leftArm.rotation.z = Math.PI / 5;
+    boss.add(leftArm);
+    
+    const rightArm = new THREE.Mesh(
+        new THREE.CapsuleGeometry(1.2, 6, 12, 12),
+        armMat
+    );
+    rightArm.position.set(6, 4, 2.8);
+    rightArm.rotation.z = -Math.PI / 5;
+    boss.add(rightArm);
+    // PointLight removed for performance
+    
+    boss.userData.runPhase = 0;
+    boss.userData.isBoss = true;
+    boss.userData.bossType = 'AzureLeviathan';
+    boss.userData.health = 2;
+    boss.userData.leftArm = leftArm;
+    boss.userData.rightArm = rightArm;
+    boss.userData.leftPupil = leftPupil;
+    boss.userData.rightPupil = rightPupil;
+    
+    return boss;
+}
+
+// --------- BOSS 8: Obsidian Colossus (17000m) ---------
+function createBoss8_ObsidianColossus() {
+    const boss = new THREE.Group();
+    
+    const bossMat = new THREE.MeshBasicMaterial({ color: 0x212121 });
+    
+    const bossBody = new THREE.Mesh(
+        new THREE.SphereGeometry(5, 20, 20), 
+        bossMat
+    );
+    bossBody.scale.set(1, 2.1, 1);
+    boss.add(bossBody);
+    
+    const belly = new THREE.Mesh(
+        new THREE.SphereGeometry(4.5, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0x616161 })
+    );
+    belly.position.set(0, -1.8, 4);
+    belly.scale.set(1, 1.2, 0.6);
+    boss.add(belly);
+    
+    const leftEyeWhite = new THREE.Mesh(
+        new THREE.SphereGeometry(1.6, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0xff5722 })
+    );
+    leftEyeWhite.position.set(-1.9, 3.8, 4.5);
+    boss.add(leftEyeWhite);
+    
+    const leftPupil = new THREE.Mesh(
+        new THREE.SphereGeometry(0.8, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0x1a1a1a })
+    );
+    leftPupil.position.set(-1.9, 3.8, 5.3);
+    boss.add(leftPupil);
+    
+    const rightEyeWhite = new THREE.Mesh(
+        new THREE.SphereGeometry(1.6, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0xff5722 })
+    );
+    rightEyeWhite.position.set(1.9, 3.8, 4.5);
+    boss.add(rightEyeWhite);
+    
+    const rightPupil = new THREE.Mesh(
+        new THREE.SphereGeometry(0.8, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0x1a1a1a })
+    );
+    rightPupil.position.set(1.9, 3.8, 5.3);
+    boss.add(rightPupil);
+    
+    const armMat = new THREE.MeshBasicMaterial({ color: 0x212121 });
+    
+    const leftArm = new THREE.Mesh(
+        new THREE.CapsuleGeometry(1.3, 6.5, 12, 12),
+        armMat
+    );
+    leftArm.position.set(-6.5, 4.5, 3);
+    leftArm.rotation.z = Math.PI / 5;
+    boss.add(leftArm);
+    
+    const rightArm = new THREE.Mesh(
+        new THREE.CapsuleGeometry(1.3, 6.5, 12, 12),
+        armMat
+    );
+    rightArm.position.set(6.5, 4.5, 3);
+    rightArm.rotation.z = -Math.PI / 5;
+    boss.add(rightArm);
+    // PointLight removed for performance
+    
+    boss.userData.runPhase = 0;
+    boss.userData.isBoss = true;
+    boss.userData.bossType = 'ObsidianColossus';
+    boss.userData.health = 2;
+    boss.userData.leftArm = leftArm;
+    boss.userData.rightArm = rightArm;
+    boss.userData.leftPupil = leftPupil;
+    boss.userData.rightPupil = rightPupil;
+    
+    return boss;
+}
+
+// --------- BOSS 9: Celestial Emperor (25000m) ---------
+function createBoss9_CelestialEmperor() {
+    const boss = new THREE.Group();
+    
+    const bossMat = new THREE.MeshBasicMaterial({ color: 0xffeb3b });
+    
+    const bossBody = new THREE.Mesh(
+        new THREE.SphereGeometry(5.5, 20, 20), 
+        bossMat
+    );
+    bossBody.scale.set(1, 2.2, 1);
+    boss.add(bossBody);
+    
+    const belly = new THREE.Mesh(
+        new THREE.SphereGeometry(5, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0xfff9c4 })
+    );
+    belly.position.set(0, -2, 4.5);
+    belly.scale.set(1, 1.2, 0.6);
+    boss.add(belly);
+    
+    const leftEyeWhite = new THREE.Mesh(
+        new THREE.SphereGeometry(1.8, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0xffffff })
+    );
+    leftEyeWhite.position.set(-2, 4.2, 5);
+    boss.add(leftEyeWhite);
+    
+    const leftPupil = new THREE.Mesh(
+        new THREE.SphereGeometry(0.9, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0xffd700 })
+    );
+    leftPupil.position.set(-2, 4.2, 5.8);
+    boss.add(leftPupil);
+    
+    const rightEyeWhite = new THREE.Mesh(
+        new THREE.SphereGeometry(1.8, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0xffffff })
+    );
+    rightEyeWhite.position.set(2, 4.2, 5);
+    boss.add(rightEyeWhite);
+    
+    const rightPupil = new THREE.Mesh(
+        new THREE.SphereGeometry(0.9, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0xffd700 })
+    );
+    rightPupil.position.set(2, 4.2, 5.8);
+    boss.add(rightPupil);
+    
+    // Divine Crown
+    const crownBase = new THREE.Mesh(
+        new THREE.CylinderGeometry(2.5, 2.7, 1, 12),
+        new THREE.MeshBasicMaterial({ color: 0xffeb3b })
+    );
+    crownBase.position.set(0, 9, 0);
+    boss.add(crownBase);
+    
+    for(let i = 0; i < 12; i++) {
+        const spike = new THREE.Mesh(
+            new THREE.ConeGeometry(0.4, 2, 6),
+            new THREE.MeshBasicMaterial({ color: 0xffeb3b })
+        );
+        const angle = (Math.PI * 2 * i) / 12;
+        spike.position.set(
+            Math.cos(angle) * 2.6,
+            9.8,
+            Math.sin(angle) * 2.6
+        );
+        boss.add(spike);
+    }
+    
+    const divineOrb = new THREE.Mesh(
+        new THREE.SphereGeometry(0.8, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.95 })
+    );
+    divineOrb.position.set(0, 11, 0);
+    boss.add(divineOrb);
+    
+    const armMat = new THREE.MeshBasicMaterial({ color: 0xffeb3b });
+    
+    const leftArm = new THREE.Mesh(
+        new THREE.CapsuleGeometry(1.5, 7, 12, 12),
+        armMat
+    );
+    leftArm.position.set(-7, 5, 3.5);
+    leftArm.rotation.z = Math.PI / 5;
+    boss.add(leftArm);
+    
+    const rightArm = new THREE.Mesh(
+        new THREE.CapsuleGeometry(1.5, 7, 12, 12),
+        armMat
+    );
+    rightArm.position.set(7, 5, 3.5);
+    rightArm.rotation.z = -Math.PI / 5;
+    boss.add(rightArm);
+    // PointLight removed for performance
+    
+    boss.userData.runPhase = 0;
+    boss.userData.isBoss = true;
+    boss.userData.bossType = 'CelestialEmperor';
+    boss.userData.health = 2;
+    boss.userData.leftArm = leftArm;
+    boss.userData.rightArm = rightArm;
+    boss.userData.leftPupil = leftPupil;
+    boss.userData.rightPupil = rightPupil;
+    boss.userData.divineOrb = divineOrb;
+    
+    return boss;
+}
+
+function createCoin() {
+    const coinGroup = new THREE.Group();
+    
+    const outerRing = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.5, 0.5, 0.15, 32),
+        new THREE.MeshBasicMaterial({ color: 0xffa500 })
+    );
+    outerRing.rotation.x = Math.PI / 2;
+    coinGroup.add(outerRing);
+    
+    const middleRing = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.42, 0.42, 0.17, 32),
+        new THREE.MeshBasicMaterial({ color: 0xffaa00 })
+    );
+    middleRing.rotation.x = Math.PI / 2;
+    coinGroup.add(middleRing);
+    
+    const innerCircle = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.32, 0.32, 0.19, 32),
+        new THREE.MeshBasicMaterial({ color: 0xffa500 })
+    );
+    innerCircle.rotation.x = Math.PI / 2;
+    coinGroup.add(innerCircle);
+    
+    const penguinBody = new THREE.Mesh(
+        new THREE.SphereGeometry(0.15, 12, 12),
+        new THREE.MeshBasicMaterial({ color: 0xdaa520 })
+    );
+    penguinBody.scale.set(1, 1.2, 0.3);
+    penguinBody.position.z = 0.11;
+    coinGroup.add(penguinBody);
+    
+    const glowGeo = new THREE.RingGeometry(0.5, 0.65, 32);
+    const glowMat = new THREE.MeshBasicMaterial({ 
+        color: 0xffd700,
+        transparent: true,
+        opacity: 0.4,
+        side: THREE.DoubleSide
+    });
+    const glow = new THREE.Mesh(glowGeo, glowMat);
+    coinGroup.add(glow);
+    // PointLight removed for performance
+    
+    coinGroup.userData = {
+        middleRing: middleRing,
+        glow: glow,
+        rotation: 0
+    };
+    
+    return coinGroup;
+}
+
+const snowGeo = new THREE.BufferGeometry();
+const snowCoords = [];
+for(let i=0; i<400; i++) snowCoords.push((Math.random()-0.5)*200, Math.random()*100, (Math.random()-0.5)*300);
+snowGeo.setAttribute('position', new THREE.Float32BufferAttribute(snowCoords, 3));
+const snowParticles = new THREE.Points(snowGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.15 }));
+scene.add(snowParticles);
+
+let lane = 0, speed = 1.2, score = 0, distance = 0, ammo = getStartingAmmo(hiScore), gameActive = true;
+document.getElementById('ammo').innerText = ammo;
+let lastStepTime = 0; 
+let obstacles = [], bullets = [], orbs = [], coins = [];
+let isFiring = false, fireInterval;
+let bossSpawnedAt = [];
+let gameOverScene, gameOverCamera, gameOverRenderer;
+let gameOverPenguin;
+
+// Object Pooling
+const bulletPool = [];
+const monsterPool = [];
+const coinPool = [];
+const orbPool = [];
+const maxPoolSize = 20;
+
+function showGameOver(causeText, finalScore, finalDistance, isNewRecord) {
+    const gameOverDiv = document.getElementById('gameover');
+    const newRecordBadge = isNewRecord ? '<div style="background:linear-gradient(135deg,#ffd93d,#ffa000);color:#fff;font-weight:900;font-size:18px;padding:8px 20px;border-radius:20px;border:3px solid #fff;box-shadow:0 4px 0 #f57c00;margin-bottom:12px;letter-spacing:1px;text-shadow:1px 1px 2px rgba(0,0,0,0.3);">🌟 NEW BEST! 🌟</div>' : '';
+    gameOverDiv.innerHTML = `
+        <div class="result-panel">
+            <div class="result-banner">GAME OVER!</div>
+            ${newRecordBadge}
+            <div class="result-info">
+                <div><span class="label">💔 Cause:</span> <span class="value">${causeText}</span></div>
+                <div><span class="label">🏆 Score:</span> <span class="value">${finalScore}</span></div>
+                <div><span class="label">📏 Distance:</span> <span class="value">${finalDistance}m</span></div>
+                <div><span class="label">⭐ Best:</span> <span class="value">${hiScore}</span></div>
+                <div><span class="label">🔫 Next Start Ammo:</span> <span class="value">${getStartingAmmo(Math.max(hiScore, finalScore))}</span></div>
+            </div>
+            <div class="result-buttons">
+                <button class="result-btn retry" onclick="location.reload()">🔄 RETRY</button>
+            </div>
+        </div>
+    `;
+    gameOverDiv.style.display = 'flex';
+}
+
+function spawnObstacle() {
+    if(!gameActive) return;
+    const randomColor = monsterColors[Math.floor(Math.random() * monsterColors.length)];
+    const monster = createMonster(randomColor);
+    monster.position.set([-5, 0, 5][Math.floor(Math.random()*3)], 1.8, camera.position.z - 220);
+    scene.add(monster);
+    obstacles.push(monster);
+}
+
+function spawnOrb() {
+    if(!gameActive) return;
+    const orb = createEnergyOrb();
+    orb.position.set([-5, 0, 5][Math.floor(Math.random()*3)], 2, camera.position.z - 200);
+    scene.add(orb);
+    orbs.push(orb);
+}
+
+function spawnCoin() {
+    if(!gameActive) return;
+    
+    let coin;
+    if(coinPool.length > 0) {
+        coin = coinPool.pop();
+        coin.visible = true;
+    } else {
+        coin = createCoin();
+    }
+    
+    coin.position.set([-5, 0, 5][Math.floor(Math.random()*3)], 1.5, camera.position.z - 150);
+    coin.userData.rotation = 0;
+    scene.add(coin);
+    coins.push(coin);
+}
+
+function returnCoinToPool(coin) {
+    coin.visible = false;
+    scene.remove(coin);
+    if(coinPool.length < maxPoolSize) {
+        coinPool.push(coin);
+    } else {
+        coin.traverse(child => {
+            if(child.geometry) child.geometry.dispose();
+            if(child.material) {
+                if(Array.isArray(child.material)) {
+                    child.material.forEach(m => m.dispose());
+                } else {
+                    child.material.dispose();
+                }
+            }
+        });
+    }
+}
+
+function shoot() {
+    if(!gameActive || ammo <= 0) return;
+    ammo--;
+    document.getElementById('ammo').innerText = ammo;
+    playSound('shoot');
+    
+    let fireballGroup;
+    if(bulletPool.length > 0) {
+        fireballGroup = bulletPool.pop();
+        fireballGroup.visible = true;
+        fireballGroup.userData.age = 0;
+    } else {
+        fireballGroup = createFireball();
+    }
+    
+    fireballGroup.position.set(playerGroup.position.x, 1.8, playerGroup.position.z - 2);
+    scene.add(fireballGroup);
+    bullets.push(fireballGroup);
+}
+
+function createFireball() {
+    const fireballGroup = new THREE.Group();
+    
+    const brightCore = new THREE.Mesh(
+        new THREE.SphereGeometry(0.3, 8, 8),
+        new THREE.MeshBasicMaterial({ 
+            color: 0xffffff,
+            transparent: true,
+            opacity: 1
+        })
+    );
+    fireballGroup.add(brightCore);
+    
+    const innerGlow = new THREE.Mesh(
+        new THREE.SphereGeometry(0.5, 8, 8),
+        new THREE.MeshBasicMaterial({ 
+            color: 0xffffaa,
+            transparent: true,
+            opacity: 0.9
+        })
+    );
+    fireballGroup.add(innerGlow);
+    
+    const middleLayer = new THREE.Mesh(
+        new THREE.SphereGeometry(0.7, 8, 8),
+        new THREE.MeshBasicMaterial({ 
+            color: 0xff8800,
+            transparent: true,
+            opacity: 0.7
+        })
+    );
+    fireballGroup.add(middleLayer);
+    
+    const outerLayer = new THREE.Mesh(
+        new THREE.SphereGeometry(0.9, 8, 8),
+        new THREE.MeshBasicMaterial({ 
+            color: 0xff4400,
+            transparent: true,
+            opacity: 0.5
+        })
+    );
+    fireballGroup.add(outerLayer);
+    
+    const flameGeo = new THREE.BufferGeometry();
+    const flamePositions = [];
+    for(let i = 0; i < 20; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const radius = 0.5 + Math.random() * 0.4;
+        const height = (Math.random() - 0.5) * 1;
+        flamePositions.push(
+            Math.cos(angle) * radius,
+            height,
+            Math.sin(angle) * radius
+        );
+    }
+    flameGeo.setAttribute('position', new THREE.Float32BufferAttribute(flamePositions, 3));
+    const flames = new THREE.Points(
+        flameGeo,
+        new THREE.PointsMaterial({ 
+            color: 0xff6600,
+            size: 0.3,
+            transparent: true,
+            opacity: 0.8
+        })
+    );
+    fireballGroup.add(flames);
+    
+    const sparkGeo = new THREE.BufferGeometry();
+    const sparkPositions = [];
+    for(let i = 0; i < 15; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const radius = 0.8 + Math.random() * 0.3;
+        sparkPositions.push(
+            Math.cos(angle) * radius,
+            (Math.random() - 0.5) * 0.8,
+            Math.sin(angle) * radius
+        );
+    }
+    sparkGeo.setAttribute('position', new THREE.Float32BufferAttribute(sparkPositions, 3));
+    const sparks = new THREE.Points(
+        sparkGeo,
+        new THREE.PointsMaterial({ 
+            color: 0xffaa00,
+            size: 0.15,
+            transparent: true,
+            opacity: 0.9
+        })
+    );
+    fireballGroup.add(sparks);
+    // PointLight removed for performance
+    
+    fireballGroup.userData = { 
+        brightCore: brightCore,
+        innerGlow: innerGlow,
+        middleLayer: middleLayer,
+        outerLayer: outerLayer,
+        flames: flames,
+        sparks: sparks,
+        rotation: 0,
+        age: 0
+    };
+    
+    return fireballGroup;
+}
+
+function returnBulletToPool(bullet) {
+    bullet.visible = false;
+    scene.remove(bullet);
+    if(bulletPool.length < maxPoolSize) {
+        bulletPool.push(bullet);
+    } else {
+        bullet.traverse(child => {
+            if(child.geometry) child.geometry.dispose();
+            if(child.material) {
+                if(Array.isArray(child.material)) {
+                    child.material.forEach(m => m.dispose());
+                } else {
+                    child.material.dispose();
+                }
+            }
+        });
+    }
+}
+
+const lBtn = document.getElementById('l-btn');
+const rBtn = document.getElementById('r-btn');
+const sBtn = document.getElementById('shoot-btn');
+
+// ── Touch controls (mobile) ──────────────────────────────────────
+lBtn.addEventListener('touchstart', (e) => { 
+    e.preventDefault(); 
+    if(lane > -1) {
+        lane--;
+        lBtn.style.transform = 'translateY(3px)';
+    }
+}, { passive: false });
+lBtn.addEventListener('touchend', () => { lBtn.style.transform = ''; });
+
+rBtn.addEventListener('touchstart', (e) => { 
+    e.preventDefault(); 
+    if(lane < 1) {
+        lane++;
+        rBtn.style.transform = 'translateY(3px)';
+    }
+}, { passive: false });
+rBtn.addEventListener('touchend', () => { rBtn.style.transform = ''; });
+
+sBtn.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    if(!isFiring && gameActive) {
+        isFiring = true;
+        shoot();
+        fireInterval = setInterval(shoot, 200);
+    }
+}, { passive: false });
+sBtn.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    isFiring = false;
+    clearInterval(fireInterval);
+}, { passive: false });
+
+// ── Mouse click controls (desktop buttons) ───────────────────────
+lBtn.addEventListener('mousedown', (e) => {
+    if(lane > -1) {
+        lane--;
+        lBtn.style.transform = 'translateY(3px)';
+    }
+});
+lBtn.addEventListener('mouseup', () => { lBtn.style.transform = ''; });
+
+rBtn.addEventListener('mousedown', (e) => {
+    if(lane < 1) {
+        lane++;
+        rBtn.style.transform = 'translateY(3px)';
+    }
+});
+rBtn.addEventListener('mouseup', () => { rBtn.style.transform = ''; });
+
+sBtn.addEventListener('mousedown', (e) => {
+    if(!isFiring && gameActive) {
+        isFiring = true;
+        shoot();
+        fireInterval = setInterval(shoot, 200);
+    }
+});
+sBtn.addEventListener('mouseup', (e) => {
+    isFiring = false;
+    clearInterval(fireInterval);
+});
+
+// ── Keyboard controls (desktop) ──────────────────────────────────
+const keysDown = {};
+document.addEventListener('keydown', (e) => {
+    if(keysDown[e.code]) return; // prevent repeat
+    keysDown[e.code] = true;
+
+    if(e.code === 'ArrowLeft' || e.code === 'KeyA') {
+        if(lane > -1) {
+            lane--;
+            lBtn.style.transform = 'translateY(3px)';
+        }
+    }
+    if(e.code === 'ArrowRight' || e.code === 'KeyD') {
+        if(lane < 1) {
+            lane++;
+            rBtn.style.transform = 'translateY(3px)';
+        }
+    }
+    if(e.code === 'Space' || e.code === 'ArrowUp' || e.code === 'KeyW') {
+        e.preventDefault();
+        if(!isFiring && gameActive) {
+            isFiring = true;
+            shoot();
+            fireInterval = setInterval(shoot, 200);
+        }
+        sBtn.style.transform = 'translateY(3px)';
+    }
+});
+document.addEventListener('keyup', (e) => {
+    keysDown[e.code] = false;
+    if(e.code === 'ArrowLeft' || e.code === 'KeyA') {
+        lBtn.style.transform = '';
+    }
+    if(e.code === 'ArrowRight' || e.code === 'KeyD') {
+        rBtn.style.transform = '';
+    }
+    if(e.code === 'Space' || e.code === 'ArrowUp' || e.code === 'KeyW') {
+        isFiring = false;
+        clearInterval(fireInterval);
+        sBtn.style.transform = '';
+    }
+});
+
+function animate() {
+    requestAnimationFrame(animate);
+    if(gameActive) {
+        const time = Date.now();
+        
+        playerGroup.rotation.y = Math.sin(time * 0.005) * 0.08;
+        
+        if(playerGroup.userData.leftWing) {
+            playerGroup.userData.leftWing.rotation.z = -Math.PI / 5 + Math.sin(time * 0.004) * 0.2;
+            playerGroup.userData.rightWing.rotation.z = Math.PI / 5 - Math.sin(time * 0.004) * 0.2;
+        }
+        
+        if(Math.random() < 0.003 && playerGroup.userData.leftPupil) {
+            playerGroup.userData.leftPupil.scale.y = 0.1;
+            playerGroup.userData.rightPupil.scale.y = 0.1;
+            setTimeout(() => {
+                playerGroup.userData.leftPupil.scale.y = 1;
+                playerGroup.userData.rightPupil.scale.y = 1;
+            }, 100);
+        }
+        
+        let lastY = playerGroup.position.y;
+        playerGroup.position.y = 1.8 + Math.sin(time * 0.015) * 0.08;
+        
+        if (lastY > playerGroup.position.y && playerGroup.position.y < 1.72) {
+            if (time - lastStepTime > 250) { 
+                playSound('step');
+                lastStepTime = time;
+            }
+        }
+
+        camera.position.z -= speed;
+        distance += speed;
+        let distDisplay = Math.floor(distance/5);
+        document.getElementById('dist').innerText = distDisplay;
+        
+        // Boss Spawn System at different distances
+        if(distDisplay >= 300 && !bossSpawnedAt.includes(300)) {
+            bossSpawnedAt.push(300);
+            const boss1 = createBoss1_IceKing();
+            boss1.position.set(0, 4.5, camera.position.z - 250);
+            scene.add(boss1);
+            obstacles.push(boss1);
+        }
+        
+        if(distDisplay >= 1000 && !bossSpawnedAt.includes(1000)) {
+            bossSpawnedAt.push(1000);
+            const boss2 = createBoss2_FireGiant();
+            boss2.position.set(0, 5, camera.position.z - 250);
+            scene.add(boss2);
+            obstacles.push(boss2);
+        }
+        
+        if(distDisplay >= 2000 && !bossSpawnedAt.includes(2000)) {
+            bossSpawnedAt.push(2000);
+            const boss3 = createBoss3_ThunderLord();
+            boss3.position.set(0, 5.5, camera.position.z - 250);
+            scene.add(boss3);
+            obstacles.push(boss3);
+        }
+        
+        if(distDisplay >= 4000 && !bossSpawnedAt.includes(4000)) {
+            bossSpawnedAt.push(4000);
+            const boss4 = createBoss4_ShadowKing();
+            boss4.position.set(0, 6, camera.position.z - 250);
+            scene.add(boss4);
+            obstacles.push(boss4);
+        }
+        
+        if(distDisplay >= 6000 && !bossSpawnedAt.includes(6000)) {
+            bossSpawnedAt.push(6000);
+            const boss5 = createBoss5_EmeraldDragon();
+            boss5.position.set(0, 6.5, camera.position.z - 250);
+            scene.add(boss5);
+            obstacles.push(boss5);
+        }
+        
+        if(distDisplay >= 9000 && !bossSpawnedAt.includes(9000)) {
+            bossSpawnedAt.push(9000);
+            const boss6 = createBoss6_CrimsonTitan();
+            boss6.position.set(0, 7, camera.position.z - 250);
+            scene.add(boss6);
+            obstacles.push(boss6);
+        }
+        
+        if(distDisplay >= 13000 && !bossSpawnedAt.includes(13000)) {
+            bossSpawnedAt.push(13000);
+            const boss7 = createBoss7_AzureLeviathan();
+            boss7.position.set(0, 7.5, camera.position.z - 250);
+            scene.add(boss7);
+            obstacles.push(boss7);
+        }
+        
+        if(distDisplay >= 17000 && !bossSpawnedAt.includes(17000)) {
+            bossSpawnedAt.push(17000);
+            const boss8 = createBoss8_ObsidianColossus();
+            boss8.position.set(0, 8, camera.position.z - 250);
+            scene.add(boss8);
+            obstacles.push(boss8);
+        }
+        
+        if(distDisplay >= 25000 && !bossSpawnedAt.includes(25000)) {
+            bossSpawnedAt.push(25000);
+            const boss9 = createBoss9_CelestialEmperor();
+            boss9.position.set(0, 9, camera.position.z - 250);
+            scene.add(boss9);
+            obstacles.push(boss9);
+        }
+
+        playerGroup.position.z = camera.position.z - 12;
+        playerGroup.position.x += (lane * 5 - playerGroup.position.x) * 0.15;
+        camera.position.x += (playerGroup.position.x - camera.position.x) * 0.05;
+        camera.rotation.z = -playerGroup.position.x * 0.02;
+
+        clouds.forEach(cloud => {
+            cloud.position.z += cloud.userData.speed;
+            
+            if(cloud.position.z > camera.position.z + 50) {
+                cloud.position.z = camera.position.z - 500;
+                cloud.position.x = (Math.random() - 0.5) * 300;
+            }
+        });
+
+        roadSegments.forEach((seg, idx) => {
+            if(camera.position.z < seg.position.z - segmentLength) {
+                seg.position.z -= segmentLength * 3;
+            }
+            
+            // Delete far segments to save memory
+            if(seg.position.z > camera.position.z + segmentLength * 2) {
+                scene.remove(seg);
+                seg.traverse(child => {
+                    if(child.geometry) child.geometry.dispose();
+                    if(child.material) {
+                        if(Array.isArray(child.material)) {
+                            child.material.forEach(m => m.dispose());
+                        } else {
+                            child.material.dispose();
+                        }
+                    }
+                });
+                roadSegments.splice(idx, 1);
+                createSegment(camera.position.z - segmentLength * 3);
+            }
+        });
+
+        if(Math.random() < 0.015) spawnObstacle();
+        if(Math.random() < 0.025) spawnCoin();
+        if(Math.random() < 0.005) spawnOrb();
+        
+        orbs.forEach((orb, i) => {
+            orb.position.z += speed;
+            orb.userData.shell.rotation.y += 0.03;
+            orb.userData.ring.rotation.z += 0.05;
+            
+            if(orb.position.distanceTo(playerGroup.position) < 2.5) {
+                playSound('powerup');
+                ammo += 1;
+                document.getElementById('ammo').innerText = ammo;
+                scene.remove(orb);
+                orbs.splice(i, 1);
+                
+                // Dispose geometry and materials
+                orb.traverse(child => {
+                    if(child.geometry) child.geometry.dispose();
+                    if(child.material) {
+                        if(Array.isArray(child.material)) {
+                            child.material.forEach(m => m.dispose());
+                        } else {
+                            child.material.dispose();
+                        }
+                    }
+                });
+            }
+            if(orb.position.z > camera.position.z + 20) {
+                scene.remove(orb);
+                orbs.splice(i, 1);
+                orb.traverse(child => {
+                    if(child.geometry) child.geometry.dispose();
+                    if(child.material) {
+                        if(Array.isArray(child.material)) {
+                            child.material.forEach(m => m.dispose());
+                        } else {
+                            child.material.dispose();
+                        }
+                    }
+                });
+            }
+        });
+
+        coins.forEach((coin, i) => {
+            coin.position.z += speed;
+            
+            if(coin.userData.middleRing) {
+                coin.userData.rotation += 0.08;
+                coin.userData.middleRing.rotation.y = coin.userData.rotation;
+                coin.rotation.y = coin.userData.rotation;
+                
+                coin.position.y = 1.5 + Math.sin(time * 0.003 + i) * 0.15;
+            }
+            
+            if(coin.position.distanceTo(playerGroup.position) < 1.5) {
+                playSound('powerup');
+                score += 10;
+                document.getElementById('score').innerText = score;
+                checkAmmoMilestone(score);
+                returnCoinToPool(coin);
+                coins.splice(i, 1);
+            }
+            
+            if(coin.position.z > camera.position.z + 20) {
+                returnCoinToPool(coin);
+                coins.splice(i, 1);
+            }
+        });
+
+        obstacles.forEach((m, i) => {
+            m.position.z += speed * 1.3;
+            m.userData.runPhase += 0.1;
+            
+            if(m.userData.isBoss) {
+                m.position.y = (m.userData.bossType === 'IceKing' ? 4.5 : 
+                               m.userData.bossType === 'FireGiant' ? 5 : 
+                               m.userData.bossType === 'ThunderLord' ? 5.5 : 
+                               m.userData.bossType === 'ShadowKing' ? 6 :
+                               m.userData.bossType === 'EmeraldDragon' ? 6.5 :
+                               m.userData.bossType === 'CrimsonTitan' ? 7 :
+                               m.userData.bossType === 'AzureLeviathan' ? 7.5 :
+                               m.userData.bossType === 'ObsidianColossus' ? 8 : 9) 
+                               + Math.sin(m.userData.runPhase * 0.5) * 0.2;
+            } else {
+                m.position.y = 1.8 + Math.sin(m.userData.runPhase) * 0.1;
+            }
+            
+            if(m.userData.isBoss) {
+                m.rotation.y = Math.sin(time * 0.001) * 0.1;
+                
+                if(m.userData.leftArm) {
+                    m.userData.leftArm.rotation.z = Math.PI / 5 + Math.sin(time * 0.002) * 0.3;
+                }
+                if(m.userData.rightArm) {
+                    m.userData.rightArm.rotation.z = -Math.PI / 5 - Math.sin(time * 0.002) * 0.3;
+                }
+                
+                if(m.userData.crystal) {
+                    m.userData.crystal.rotation.y += 0.03;
+                }
+                
+                if(m.userData.orb) {
+                    m.userData.orb.rotation.y += 0.05;
+                }
+                
+                if(m.userData.gem) {
+                    m.userData.gem.rotation.y += 0.04;
+                }
+                
+                if(m.userData.divineOrb) {
+                    m.userData.divineOrb.rotation.y += 0.06;
+                }
+            } else {
+                if(m.userData.leftArm) {
+                    m.userData.leftArm.rotation.z = Math.PI / 4 + Math.sin(m.userData.runPhase * 2) * 0.2;
+                    m.userData.rightArm.rotation.z = -Math.PI / 4 - Math.sin(m.userData.runPhase * 2) * 0.2;
+                }
+            }
+            
+            // Collision detection with appropriate radius
+            const collisionRadius = m.userData.isBoss ? 5 : 2.2;
+            if(m.position.distanceTo(playerGroup.position) < collisionRadius) {
+                playSound('gameover');
+                gameActive = false;
+                const isNewRecord = updateHiScore(score);
+                
+                const bossName = m.userData.isBoss ? 
+                    `${m.userData.bossType === 'IceKing' ? 'Ice King ❄️' : 
+                       m.userData.bossType === 'FireGiant' ? 'Fire Giant 🔥' :
+                       m.userData.bossType === 'ThunderLord' ? 'Thunder Lord ⚡' : 
+                       m.userData.bossType === 'ShadowKing' ? 'Shadow King 👑' :
+                       m.userData.bossType === 'EmeraldDragon' ? 'Emerald Dragon 🐉' :
+                       m.userData.bossType === 'CrimsonTitan' ? 'Crimson Titan 💥' :
+                       m.userData.bossType === 'AzureLeviathan' ? 'Azure Leviathan 🌊' :
+                       m.userData.bossType === 'ObsidianColossus' ? 'Obsidian Colossus 🗿' :
+                       'Celestial Emperor 👼'}` : 
+                    'Monster 👾';
+                
+                showGameOver(bossName, score, Math.floor(distance/5), isNewRecord);
+                clearInterval(fireInterval);
+            }
+            
+            if(m.position.z > camera.position.z + 20) {
+                scene.remove(m);
+                obstacles.splice(i, 1);
+                
+                // Clean up geometry and materials
+                if(!m.userData.isBoss) {
+                    m.traverse(child => {
+                        if(child.geometry) child.geometry.dispose();
+                        if(child.material) {
+                            if(Array.isArray(child.material)) {
+                                child.material.forEach(mat => mat.dispose());
+                            } else {
+                                child.material.dispose();
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        bullets.forEach((b, bi) => {
+            b.position.z -= 4.5;
+            
+            if(b.userData.brightCore) {
+                b.userData.age += 0.03;
+                b.userData.rotation += 0.1;
+                
+                const pulse = 1 + Math.sin(time * 0.02) * 0.2;
+                b.userData.brightCore.scale.set(pulse, pulse, pulse);
+                
+                b.userData.middleLayer.rotation.z = b.userData.rotation * 0.5;
+                b.userData.outerLayer.rotation.z = -b.userData.rotation * 0.3;
+                
+                b.userData.flames.rotation.z = b.userData.rotation;
+                b.userData.sparks.rotation.z = -b.userData.rotation;
+                
+                const ageOpacity = Math.max(0.3, 1 - b.userData.age);
+                b.userData.flames.material.opacity = 0.8 * ageOpacity;
+                b.userData.sparks.material.opacity = 0.9 * ageOpacity;
+            }
+            
+            obstacles.forEach((o, oi) => {
+                const hitRadius = o.userData.isBoss ? 5 : 3;
+                if(b.position.distanceTo(o.position) < hitRadius) {
+                    playSound('hit');
+                    
+                    if(o.userData.isBoss) {
+                        o.userData.health -= 1;
+                        if(o.userData.health <= 0) {
+                            scene.remove(o); 
+                            obstacles.splice(oi, 1);
+                            
+                            const bossScore = o.userData.bossType === 'IceKing' ? 200 :
+                                            o.userData.bossType === 'FireGiant' ? 300 :
+                                            o.userData.bossType === 'ThunderLord' ? 400 : 
+                                            o.userData.bossType === 'ShadowKing' ? 500 :
+                                            o.userData.bossType === 'EmeraldDragon' ? 600 :
+                                            o.userData.bossType === 'CrimsonTitan' ? 700 :
+                                            o.userData.bossType === 'AzureLeviathan' ? 800 :
+                                            o.userData.bossType === 'ObsidianColossus' ? 900 : 1000;
+                            
+                            score += bossScore;
+                            document.getElementById('score').innerText = score;
+                            checkAmmoMilestone(score);
+                            
+                            // Dispose boss
+                            o.traverse(child => {
+                                if(child.geometry) child.geometry.dispose();
+                                if(child.material) {
+                                    if(Array.isArray(child.material)) {
+                                        child.material.forEach(m => m.dispose());
+                                    } else {
+                                        child.material.dispose();
+                                    }
+                                }
+                            });
+                        }
+                    } else {
+                        scene.remove(o);
+                        obstacles.splice(oi, 1);
+                        score += 50;
+                        document.getElementById('score').innerText = score;
+                        checkAmmoMilestone(score);
+                        
+                        // Dispose monster
+                        o.traverse(child => {
+                            if(child.geometry) child.geometry.dispose();
+                            if(child.material) {
+                                if(Array.isArray(child.material)) {
+                                    child.material.forEach(m => m.dispose());
+                                } else {
+                                    child.material.dispose();
+                                }
+                            }
+                        });
+                    }
+                    
+                    returnBulletToPool(b);
+                    bullets.splice(bi, 1);
+                }
+            });
+            if(b.position.z < camera.position.z - 300) { 
+                returnBulletToPool(b);
+                bullets.splice(bi, 1);
+            }
+        });
+        speed += 0.0004;
+    }
+    renderer.render(scene, camera);
+}
+animate();
+
+window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// Memory cleanup on visibility change
+document.addEventListener('visibilitychange', () => {
+    if(document.hidden) {
+        // Clear pools when tab is hidden
+        bulletPool.forEach(b => {
+            b.traverse(child => {
+                if(child.geometry) child.geometry.dispose();
+                if(child.material) {
+                    if(Array.isArray(child.material)) {
+                        child.material.forEach(m => m.dispose());
+                    } else {
+                        child.material.dispose();
+                    }
+                }
+            });
+        });
+        bulletPool.length = 0;
+        
+        coinPool.forEach(c => {
+            c.traverse(child => {
+                if(child.geometry) child.geometry.dispose();
+                if(child.material) {
+                    if(Array.isArray(child.material)) {
+                        child.material.forEach(m => m.dispose());
+                    } else {
+                        child.material.dispose();
+                    }
+                }
+            });
+        });
+        coinPool.length = 0;
+    }
+});
+</script>
+<div style="padding:30px 20px; background:white; color:#222; font-family:Arial,sans-serif; max-width:800px; margin:0 auto;">
+
+  <h1 style="font-size:28px; color:#1a1a2e;">Point Run – Free Online 3D Endless Runner Game</h1>
+  <p style="font-size:16px; line-height:1.7;">
+    <strong>Point Run</strong> is a free online 3D endless runner game where you control a cute penguin character and try to survive as long as possible.
+    Run forward, avoid dangerous obstacles, shoot enemies, collect coins, and beat your high score — all in your browser with no download required!
+  </p>
+  <img src="game.png" alt="Point Run Game Screenshot" width="300" style="display:block; margin:16px 0; border-radius:8px;">
+
+  <h2 style="font-size:22px; color:#1a1a2e; margin-top:28px;">🎮 How to Play Point Run</h2>
+  <p style="font-size:15px; line-height:1.7;">Playing Point Run is simple and fun. Follow these steps to get started:</p>
+  <ul style="font-size:15px; line-height:2;">
+    <li>👉 <strong>Move Left / Right:</strong> Swipe on mobile or use Arrow Keys / A-D on keyboard</li>
+    <li>👆 <strong>Jump:</strong> Tap the screen or press the Up Arrow / W key</li>
+    <li>🔫 <strong>Shoot:</strong> Tap the shoot button or press Space Bar to fire at enemies</li>
+    <li>💰 <strong>Collect Coins:</strong> Run over coins to increase your score</li>
+    <li>⚡ <strong>Survive:</strong> The game gets faster over time — stay focused!</li>
+  </ul>
+
+  <h2 style="font-size:22px; color:#1a1a2e; margin-top:28px;">🌟 Game Features</h2>
+  <ul style="font-size:15px; line-height:2;">
+    <li>✅ Full 3D graphics powered by Three.js</li>
+    <li>✅ Endless runner gameplay with increasing speed</li>
+    <li>✅ Shooting system with ammo management</li>
+    <li>✅ Boss enemies with unique abilities (IceKing, FireGiant, ThunderLord and more!)</li>
+    <li>✅ High Score system saved in your browser</li>
+    <li>✅ Works on mobile and desktop — no download needed</li>
+    <li>✅ Completely free to play</li>
+  </ul>
+
+  <h2 style="font-size:22px; color:#1a1a2e; margin-top:28px;">🏆 Tips to Get a High Score</h2>
+  <ul style="font-size:15px; line-height:2;">
+    <li>🎯 Save ammo for boss enemies — they need multiple hits</li>
+    <li>🏃 Stay in the center lane when possible to react faster</li>
+    <li>💡 Shoot regular enemies for +50 points each</li>
+    <li>👑 Defeating bosses gives massive bonus points (200–1000!)</li>
+    <li>🔄 Play again after each run — the more you play, the better you get</li>
+  </ul>
+
+  <h2 style="font-size:22px; color:#1a1a2e; margin-top:28px;">📱 Play on Any Device</h2>
+  <p style="font-size:15px; line-height:1.7;">
+    Point Run is fully optimized for both <strong>mobile phones</strong> and <strong>desktop browsers</strong>.
+    Whether you are on Android, iPhone, or PC, you can enjoy a smooth and immersive gaming experience.
+    Just open the game in your browser and start playing instantly — no installation required.
+  </p>
+
+  <h2 style="font-size:22px; color:#1a1a2e; margin-top:28px;">❓ Frequently Asked Questions</h2>
+  <p style="font-size:15px; line-height:1.7;"><strong>Is Point Run free to play?</strong><br>Yes! Point Run is 100% free. Just open the website and play.</p>
+  <p style="font-size:15px; line-height:1.7;"><strong>Do I need to download anything?</strong><br>No download needed. The game runs directly in your web browser.</p>
+  <p style="font-size:15px; line-height:1.7;"><strong>Can I play on my phone?</strong><br>Yes! Point Run supports touch controls and works great on mobile devices.</p>
+  <p style="font-size:15px; line-height:1.7;"><strong>How do I beat boss enemies?</strong><br>Shoot them multiple times. Each boss has different health points. Bigger bosses need more hits!</p>
+
+  <img src="game.jpg" alt="Point Run Gameplay Screenshot" style="display:block; margin:16px 0; border-radius:8px; max-width:100%;">
+</div>
+
+<div id="ad-banner">
+  <script>
+    atOptions = {
+      'key' : 'd8baa2268d52759c0e0b61e900ccda59',
+      'format' : 'iframe',
+      'height' : 50,
+      'width' : 320,
+      'params' : {}
+    };
+  </script>
+  <script src="https://www.highperformanceformat.com/d8baa2268d52759c0e0b61e900ccda59/invoke.js"></script>
+</div>
+</body>
+</html>
